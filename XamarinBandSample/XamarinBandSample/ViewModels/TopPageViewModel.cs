@@ -174,6 +174,8 @@ namespace XamarinBandSample.ViewModels
             }
             this.ConnectMessage = string.Empty;
             this.BandName = device.Name;
+            this.HardwareVersion = await this.service.GetHardwareVersionAsync();
+            this.FirmwareVersion = await this.service.GetFirmwareVersionAsync();
 
             this.IsConnected = true;
             await App.Current.MainPage.DisplayAlert(

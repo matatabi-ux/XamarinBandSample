@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:cv="clr-namespace:XamarinBandSample.Converters;assembly=XamarinBandSample"
              xmlns:prismmvvm="clr-namespace:Prism.Mvvm;assembly=XamarinBandSample"
              prismmvvm:ViewModelLocator.AutoWireViewModel="true"
@@ -34,6 +33,7 @@
               Command="{Binding ConnectCommand}"/>
       <Grid Padding="20,0">
         <Label Text="{Binding ConnectMessage}"
+               HeightRequest="20"
                Opacity="0.6"
                FontSize="Small"/>
       </Grid>
@@ -43,8 +43,33 @@
                  Spacing="5">
       <Label Text="Device Name:"
              FontSize="Medium"/>
-      <Label Text="{Binding BandName}"
-             FontSize="Small"/>
+      <Grid Padding="20,0">
+        <Label Text="{Binding BandName}"
+               HeightRequest="20"
+               FontSize="Small"/>
+      </Grid>
+    </StackLayout>
+
+    <StackLayout Orientation="Vertical"
+                 Spacing="5">
+      <Label Text="Hardware Version:"
+             FontSize="Medium"/>
+      <Grid Padding="20,0">
+        <Label Text="{Binding HardwareVersion}"
+               HeightRequest="20"
+               FontSize="Small"/>
+      </Grid>
+    </StackLayout>
+
+    <StackLayout Orientation="Vertical"
+                 Spacing="5">
+      <Label Text="Firmware Version:"
+             FontSize="Medium"/>
+      <Grid Padding="20,0">
+        <Label Text="{Binding FirmwareVersion}"
+               HeightRequest="20"
+               FontSize="Small"/>
+      </Grid>
     </StackLayout>
 
   </StackLayout>
