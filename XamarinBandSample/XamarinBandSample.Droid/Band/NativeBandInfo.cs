@@ -1,17 +1,19 @@
+extern alias android;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Microsoft.Band;
-using XamarinBandSample.Band;
+using global::Microsoft.Band;
+using Native = android::Microsoft.Band;
 
 namespace XamarinBandSample.Droid.Band
 {
     /// <summary>
     /// Android 用 Band デバイス情報
     /// </summary>
-    public class BandDevice : IBandDevice
+    public class NativeBandInfo : IBandInfo
     {
         /// <summary>
         /// 名称
@@ -27,14 +29,22 @@ namespace XamarinBandSample.Droid.Band
         }
 
         /// <summary>
-        /// デバイス情報
+        /// 接続方式
         /// </summary>
-        private IBandDeviceInfo deviceInfo = null;
+        public BandConnectionType ConnectionType
+        {
+            get { return BandConnectionType.Bluetooth; }
+        }
 
         /// <summary>
         /// デバイス情報
         /// </summary>
-        public IBandDeviceInfo DeviceInfo
+        private Native.IBandDeviceInfo deviceInfo = null;
+
+        /// <summary>
+        /// デバイス情報
+        /// </summary>
+        public android::Microsoft.Band.IBandDeviceInfo DeviceInfo
         {
             get { return this.deviceInfo; }
         }
@@ -43,7 +53,7 @@ namespace XamarinBandSample.Droid.Band
         /// コンストラクタ
         /// </summary>
         /// <param name="info">Band デバイス情報</param>
-        public BandDevice(IBandDeviceInfo info)
+        public NativeBandInfo(android::Microsoft.Band.IBandDeviceInfo info)
         {
             this.deviceInfo = info;
             this.name = (string)info.Name;

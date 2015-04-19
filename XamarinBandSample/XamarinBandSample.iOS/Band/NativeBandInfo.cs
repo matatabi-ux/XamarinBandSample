@@ -1,17 +1,21 @@
+extern alias ios;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Microsoft.Band;
-using XamarinBandSample.Band;
+using Foundation;
+using global::Microsoft.Band;
+using Native = ios::Microsoft.Band;
+using UIKit;
 
-namespace XamarinBandSample.Phone.Band
+namespace XamarinBandSample.iOS.Band
 {
     /// <summary>
-    /// Windows Phone 用 Band デバイス情報
+    /// iOS 用 Band デバイス情報
     /// </summary>
-    public class BandDevice : IBandDevice
+    public class NativeBandInfo : IBandInfo
     {
         /// <summary>
         /// 名称
@@ -27,26 +31,20 @@ namespace XamarinBandSample.Phone.Band
         }
 
         /// <summary>
-        /// デバイス情報
+        /// 接続方式
         /// </summary>
-        private IBandInfo deviceInfo = null;
-
-        /// <summary>
-        /// デバイス情報
-        /// </summary>
-        public IBandInfo DeviceInfo
+        public BandConnectionType ConnectionType
         {
-            get { return this.deviceInfo; }
+            get { return BandConnectionType.Bluetooth; }
         }
 
         /// <summary>
         /// コンストラクタ
         /// </summary>
         /// <param name="client">Band クライアント</param>
-        public BandDevice(IBandInfo info)
+        public NativeBandInfo(Native.BandClient client)
         {
-            this.deviceInfo = info;
-            this.name = info.Name;
+            this.name = (string)client.Name;
         }
     }
 }

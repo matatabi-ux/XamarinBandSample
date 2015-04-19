@@ -1,3 +1,5 @@
+extern alias android;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,25 +11,25 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using Microsoft.Band;
-using XamarinBandSample.Band;
+using global::Microsoft.Band;
+using Native = android::Microsoft.Band;
 
 namespace XamarinBandSample.Droid.Band
 {
     /// <summary>
     /// Android 用 Microsoft Band デバイス管理クラス
     /// </summary>
-    public class BandManager : IBandManager
+    public class NativeBandClientManager : IBandClientManager
     {
         /// <summary>
         /// 登録 Band デバイス情報を取得する
         /// </summary>
         /// <returns>登録 Band デバイス情報</returns>
-        public Task<IList<IBandDevice>> GetBandsAsync()
+        public Task<IBandInfo[]> GetBandsAsync()
         {
-            return Task.FromResult<IList<IBandDevice>>((
-                from i in BandClientManager.Instance.GetPairedBands()
-                select new BandDevice(i) as IBandDevice).ToList());
+            return Task.FromResult<IBandInfo[]>((
+                from i in Native.BandClientManager.Instance.GetPairedBands()
+                select new NativeBandInfo(i)).ToArray());
         }
 
         /// <summary>
@@ -35,21 +37,22 @@ namespace XamarinBandSample.Droid.Band
         /// </summary>
         /// <param name="device">Band デバイス情報</param>
         /// <returns>Band 接続サービス</returns>
-        public async Task<IBandService> ConnectAsync(IBandDevice device)
+        public async Task<IBandClient> ConnectAsync(IBandInfo bandInfo)
         {
-            var info = device as BandDevice;
+            var info = bandInfo as NativeBandInfo;
             if (info == null)
             {
                 throw new InvalidOperationException("Parameter 'device' is not BandDevice type.");
             }
-            var client = BandClientManager.Instance.Create(Application.Context, info.DeviceInfo);
+            var client = Native.BandClientManager.Instance.Create(Application.Context, info.DeviceInfo);
 
             if (client != null && !client.IsConnected)
             {
-               var result = await client.ConnectTaskAsync();
+                var result = await Native.BandClientExtensions.ConnectTaskAsync(client);
             }
 
-            return new BandService(client);
+            return new NativeBandClient(client);
         }
+
     }
 }

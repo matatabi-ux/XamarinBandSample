@@ -50,8 +50,13 @@
       <HintPath>..\..\packages\Xamarin.Forms.1.4.2.6353-pre2\lib\MonoAndroid10\FormsViewGroup.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Band, Version=1.3.10219.1, Culture=neutral, PublicKeyToken=608d7da3159f502b, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Band.1.3.10219-preview\lib\portable-net45+win+wpa81\Microsoft.Band.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Band.Android">
       <HintPath>..\XamarinBandSample\InfrastructureAssemblies\Microsoft.Band.Android.dll</HintPath>
+      <Aliases>android</Aliases>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -89,9 +94,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Band\BandDevice.cs" />
-    <Compile Include="Band\BandManager.cs" />
-    <Compile Include="Band\BandService.cs" />
+    <Compile Include="Band\NativeBandInfo.cs" />
+    <Compile Include="Band\NativeBandClientManager.cs" />
+    <Compile Include="Band\NativeBandClient.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

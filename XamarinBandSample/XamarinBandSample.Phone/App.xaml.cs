@@ -15,9 +15,11 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using Microsoft.Band;
+using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Practices.Unity;
-using XamarinBandSample.Band;
-using XamarinBandSample.Phone.Band;
+using XamarinBandSample.ViewModels;
+using XamarinBandSample.Views;
 
 // 空のアプリケーション テンプレートについては、http://go.microsoft.com/fwlink/?LinkId=391641 を参照してください
 
@@ -40,7 +42,8 @@ namespace XamarinBandSample.Phone
             this.Suspending += this.OnSuspending;
 
             // Microsoft Band デバイス管理クラスを DI コンテナに登録
-            XamarinBandSample.App.Container.RegisterType<IBandManager, BandManager>(new ContainerControlledLifetimeManager());
+            XamarinBandSample.App.Container.RegisterType<IBandClientManager, BandClientManager>(new ContainerControlledLifetimeManager());
+            XamarinBandSample.App.Container.RegisterInstance<IBandClientManager>(BandClientManager.Instance);
         }
 
         /// <summary>

@@ -1,3 +1,5 @@
+extern alias ios;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,27 +7,30 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Foundation;
-using Microsoft.Band;
-using Microsoft.Band.Notifications;
-using XamarinBandSample.Band;
+using global::Microsoft.Band;
+using global::Microsoft.Band.Notifications;
+using global::Microsoft.Band.Personalization;
+using global::Microsoft.Band.Sensors;
+using global::Microsoft.Band.Tiles;
+using Native = ios::Microsoft.Band;
 
 namespace XamarinBandSample.iOS.Band
 {
     /// <summary>
     /// iOS 用 Microsoft Band デバイス情報のインターフェース
     /// </summary>
-    public class BandService : IBandService
+    public class NativeBandClient : IBandClient
     {
         /// <summary>
         /// 接続クライアント
         /// </summary>
-        private BandClient client = null;
+        private Native.BandClient client = null;
 
         /// <summary>
         /// コンストラクタ
         /// </summary>
         /// <param name="client">接続クライアント</param>
-        public BandService(BandClient client)
+        public NativeBandClient(Native.BandClient client)
         {
             this.client = client;
         }
@@ -68,6 +73,32 @@ namespace XamarinBandSample.iOS.Band
         public Task<string> GetHardwareVersionAsync(CancellationToken token)
         {
             return this.GetHardwareVersionAsync();
+        }
+
+        //TODO:後で実装予定
+
+        public IBandNotificationManager NotificationManager
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public IBandPersonalizationManager PersonalizationManager
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public IBandSensorManager SensorManager
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public IBandTileManager TileManager
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public void Dispose()
+        {
         }
     }
 }

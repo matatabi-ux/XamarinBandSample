@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Foundation;
+using Microsoft.Band;
 using Microsoft.Practices.Unity;
 using UIKit;
-using XamarinBandSample.Band;
 using XamarinBandSample.iOS.Band;
 
 namespace XamarinBandSample.iOS
@@ -16,7 +16,7 @@ namespace XamarinBandSample.iOS
         static void Main(string[] args)
         {
             // Microsoft Band デバイス管理クラスを DI コンテナに登録
-            App.Container.RegisterType<IBandManager, BandManager>(new ContainerControlledLifetimeManager());
+            App.Container.RegisterType<IBandClientManager, NativeBandClientManager>(new ContainerControlledLifetimeManager());
 
             // if you want to use a different Application Delegate class from "AppDelegate"
             // you can specify it here.

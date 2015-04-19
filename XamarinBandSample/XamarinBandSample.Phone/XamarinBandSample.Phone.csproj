@@ -84,9 +84,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Band\BandDevice.cs" />
-    <Compile Include="Band\BandManager.cs" />
-    <Compile Include="Band\BandService.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

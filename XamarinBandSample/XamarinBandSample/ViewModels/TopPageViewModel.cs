@@ -13,11 +13,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Microsoft.Band;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Practices.Unity;
 using Xamarin.Forms;
-using XamarinBandSample.Band;
 
 namespace XamarinBandSample.ViewModels
 {
@@ -29,12 +29,12 @@ namespace XamarinBandSample.ViewModels
         /// <summary>
         /// Microsoft Band デバイス管理クラス
         /// </summary>
-        private IBandManager manager = null;
+        private IBandClientManager manager = null;
 
         /// <summary>
         /// Microsoft Band 接続サービスクラス
         /// </summary>
-        private IBandService service = null;
+        private IBandClient client = null;
 
         #region ShowBasics
 
@@ -221,7 +221,7 @@ namespace XamarinBandSample.ViewModels
         /// </summary>
         /// <param name="manager">Microsoft Band デバイス管理クラス</param>
         [InjectionConstructor]
-        public TopPageViewModel(IBandManager manager)
+        public TopPageViewModel(IBandClientManager manager)
         {
             this.manager = manager;
             this.SelectBasicsCommand = new DelegateCommand(this.SelectBasics, () => { return !this.ShowBasics; });
@@ -268,9 +268,9 @@ namespace XamarinBandSample.ViewModels
 
             var device = devices.First();
             this.ConnectMessage = "Connecting to Band...";
-            this.service = await this.manager.ConnectAsync(device);
+            this.client = await this.manager.ConnectAsync(device);
 
-            if (this.service == null)
+            if (this.client == null)
             {
                 await App.Navigation.CurrentPage.DisplayAlert(
                     "Error",
@@ -280,8 +280,8 @@ namespace XamarinBandSample.ViewModels
             }
             this.ConnectMessage = string.Empty;
             this.BandName = device.Name;
-            this.HardwareVersion = await this.service.GetHardwareVersionAsync();
-            this.FirmwareVersion = await this.service.GetFirmwareVersionAsync();
+            this.HardwareVersion = await this.client.GetHardwareVersionAsync();
+            this.FirmwareVersion = await this.client.GetFirmwareVersionAsync();
 
             this.IsConnected = true;
             await App.Navigation.CurrentPage.DisplayAlert(
