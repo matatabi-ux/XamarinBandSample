@@ -1,3 +1,11 @@
+#region License
+//-----------------------------------------------------------------------
+// <copyright>
+//     Copyright matatabi-ux 2015.
+// </copyright>
+//-----------------------------------------------------------------------
+#endregion
+
 extern alias ios;
 
 using System;
@@ -44,6 +52,5 @@ namespace XamarinBandSample.iOS.Band
 
             return new NativeBandClient(client);
         }
-
     }
 }

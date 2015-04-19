@@ -1,3 +1,11 @@
+#region License
+//-----------------------------------------------------------------------
+// <copyright>
+//     Copyright matatabi-ux 2015.
+// </copyright>
+//-----------------------------------------------------------------------
+#endregion
+
 extern alias android;
 
 using System;

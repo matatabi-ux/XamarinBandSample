@@ -1,3 +1,11 @@
+#region License
+//-----------------------------------------------------------------------
+// <copyright>
+//     Copyright matatabi-ux 2015.
+// </copyright>
+//-----------------------------------------------------------------------
+#endregion
+
 extern alias android;
 
 using System;
@@ -53,6 +61,5 @@ namespace XamarinBandSample.Droid.Band
 
             return new NativeBandClient(client);
         }
-
     }
 }
