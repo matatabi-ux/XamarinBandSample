@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:cv="clr-namespace:XamarinBandSample.Converters;assembly=XamarinBandSample"
+             xmlns:t="clr-namespace:XamarinBandSample.Triggers;assembly=XamarinBandSample"
              xmlns:prismmvvm="clr-namespace:Prism.Mvvm;assembly=XamarinBandSample"
              prismmvvm:ViewModelLocator.AutoWireViewModel="true"
              x:Class="XamarinBandSample.Views.TopPage">
@@ -110,7 +111,14 @@
                FontSize="Medium"/>
         <Switch IsToggled="{Binding IsSensorDetecting}"
                 Grid.Column="1"
-                Grid.Row="0" />
+                Grid.Row="0">
+          <Switch.Triggers>
+            <EventTrigger Event="Toggled">
+              <t:InvokeCommandAction Command="{Binding ChangeDetectSensorsCommand}" 
+                                     CommandParameter="{Binding IsSensorDetecting}"/>
+            </EventTrigger>
+          </Switch.Triggers>
+        </Switch>
 
         <StackLayout Orientation="Horizontal"
                      Grid.Column="0"

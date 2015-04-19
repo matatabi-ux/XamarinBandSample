@@ -189,6 +189,15 @@ namespace XamarinBandSample.ViewModels
 
         #endregion //ConnectCommand
 
+        #region ChangeDetectSensorsCommand
+
+        /// <summary>
+        /// センサー監視切替コマンド
+        /// </summary>
+        public ICommand ChangeDetectSensorsCommand { get; private set; }
+
+        #endregion //ChangeDetectSensorsCommand
+
         #region ConnectMessage
 
         /// <summary>
@@ -218,6 +227,7 @@ namespace XamarinBandSample.ViewModels
             this.SelectBasicsCommand = new DelegateCommand(this.SelectBasics, () => { return !this.ShowBasics; });
             this.SelectSensorsCommand = new DelegateCommand(this.SelectSensors, () => { return !this.ShowSensors; });
             this.ConnectCommand = DelegateCommand.FromAsyncHandler(this.Connect);
+            this.ChangeDetectSensorsCommand = DelegateCommand<bool>.FromAsyncHandler(this.ChangeDetectSensors);
         }
 
         /// <summary>
@@ -278,6 +288,23 @@ namespace XamarinBandSample.ViewModels
                 "Connected",
                 string.Format("Microsoft Band '{0}' connected.", device.Name),
                 "OK");
+        }
+
+        /// <summary>
+        /// センサー監視切替
+        /// </summary>
+        /// <param name="detecting">センサー監視フラグ</param>
+        /// <returns>Task</returns>
+        private async Task ChangeDetectSensors(bool detecting)
+        {
+            if (detecting)
+            {
+                //TODO: センサー監視開始処理
+            }
+            else
+            {
+                //TODO: センサー監視終了処理
+            }
         }
     }
 }
