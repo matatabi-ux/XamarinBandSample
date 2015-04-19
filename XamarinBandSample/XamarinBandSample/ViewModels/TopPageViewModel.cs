@@ -36,8 +36,44 @@ namespace XamarinBandSample.ViewModels
         /// </summary>
         private IBandService service = null;
 
+        #region ShowBasics
+
+        /// <summary>
+        /// 基本設定表示フラグ
+        /// </summary>
+        private bool showBasics = true;
+
+        /// <summary>
+        /// 基本設定表示フラグ
+        /// </summary>
+        public bool ShowBasics
+        {
+            get { return this.showBasics; }
+            set { this.SetProperty(ref this.showBasics, value); }
+        }
+
+        #endregion //ShowBasics
+
+        #region ShowSensors
+
+        /// <summary>
+        /// センサー情報表示フラグ
+        /// </summary>
+        private bool showSensors = false;
+
+        /// <summary>
+        /// センサー情報表示フラグ
+        /// </summary>
+        public bool ShowSensors
+        {
+            get { return this.showSensors; }
+            set { this.SetProperty(ref this.showSensors, value); }
+        }
+
+        #endregion //ShowSensors
+
         #region IsConnected
-        
+
         /// <summary>
         /// 接続フラグ
         /// </summary>
@@ -108,6 +144,42 @@ namespace XamarinBandSample.ViewModels
 
         #endregion //FirmwareVersion
 
+        #region IsSensorDetecting
+
+        /// <summary>
+        /// センサー監視フラグ
+        /// </summary>
+        private bool isSensorDetecting = false;
+
+        /// <summary>
+        /// センサー監視フラグ
+        /// </summary>
+        public bool IsSensorDetecting
+        {
+            get { return this.isSensorDetecting; }
+            set { this.SetProperty(ref this.isSensorDetecting, value); }
+        }
+
+        #endregion //IsSensorDetecting
+
+        #region SelectBasicsCommand
+
+        /// <summary>
+        /// 基本設定表示選択コマンド
+        /// </summary>
+        public ICommand SelectBasicsCommand { get; private set; }
+
+        #endregion //SelectBasicsCommand
+
+        #region SelectSensorsCommand
+
+        /// <summary>
+        /// センサー情報表示選択コマンド
+        /// </summary>
+        public ICommand SelectSensorsCommand { get; private set; }
+
+        #endregion //SelectSensorsCommand
+
         #region ConnectCommand
 
         /// <summary>
@@ -143,7 +215,31 @@ namespace XamarinBandSample.ViewModels
         public TopPageViewModel(IBandManager manager)
         {
             this.manager = manager;
+            this.SelectBasicsCommand = new DelegateCommand(this.SelectBasics, () => { return !this.ShowBasics; });
+            this.SelectSensorsCommand = new DelegateCommand(this.SelectSensors, () => { return !this.ShowSensors; });
             this.ConnectCommand = DelegateCommand.FromAsyncHandler(this.Connect);
+        }
+
+        /// <summary>
+        /// 基本設定表示切替
+        /// </summary>
+        private void SelectBasics()
+        {
+            this.ShowSensors = false;
+            this.ShowBasics = true;
+            ((DelegateCommand)this.SelectBasicsCommand).RaiseCanExecuteChanged();
+            ((DelegateCommand)this.SelectSensorsCommand).RaiseCanExecuteChanged();
+        }
+
+        /// <summary>
+        /// センサー情報表示切替
+        /// </summary>
+        private void SelectSensors()
+        {
+            this.ShowBasics = false;
+            this.ShowSensors = true;
+            ((DelegateCommand)this.SelectBasicsCommand).RaiseCanExecuteChanged();
+            ((DelegateCommand)this.SelectSensorsCommand).RaiseCanExecuteChanged();
         }
 
         /// <summary>
@@ -156,7 +252,7 @@ namespace XamarinBandSample.ViewModels
             
             if (!devices.Any())
             {
-                await App.Current.MainPage.DisplayAlert("Warning", "No Microsoft Band found.", "OK");
+                await App.Navigation.CurrentPage.DisplayAlert("Warning", "No Microsoft Band found.", "OK");
                 return;
             }
 
@@ -166,7 +262,7 @@ namespace XamarinBandSample.ViewModels
 
             if (this.service == null)
             {
-                await App.Current.MainPage.DisplayAlert(
+                await App.Navigation.CurrentPage.DisplayAlert(
                     "Error",
                     string.Format("Failed to connect to Microsoft Band '{0}'.", device.Name),
                     "OK");
@@ -178,7 +274,7 @@ namespace XamarinBandSample.ViewModels
             this.FirmwareVersion = await this.service.GetFirmwareVersionAsync();
 
             this.IsConnected = true;
-            await App.Current.MainPage.DisplayAlert(
+            await App.Navigation.CurrentPage.DisplayAlert(
                 "Connected",
                 string.Format("Microsoft Band '{0}' connected.", device.Name),
                 "OK");

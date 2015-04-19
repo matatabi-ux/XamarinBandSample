@@ -11,67 +11,122 @@
     </ResourceDictionary>
   </ContentPage.Resources>
   <ContentPage.Padding>
-    <OnPlatform x:TypeArguments="Thickness" iOS="0,20,0,0"/>
+    <OnPlatform x:TypeArguments="Thickness"
+                iOS="0,20,0,0"/>
   </ContentPage.Padding>
+  <ContentPage.ToolbarItems>
+    <ToolbarItem Text="Basics"
+                 Command="{Binding SelectBasicsCommand}">
+    </ToolbarItem>
+    <ToolbarItem Text="Sensors"
+                 Command="{Binding SelectSensorsCommand}">
+    </ToolbarItem>
+  </ContentPage.ToolbarItems>
 
-  <StackLayout Orientation="Vertical"
-               Padding="10"
-               Spacing="10">
-    
-    <Label Text="Band Test"
-           FontSize="Large"
-           HorizontalOptions="Center"
-           VerticalOptions="Center"/>
+  <Grid>
 
-    <StackLayout Orientation="Vertical"
-                 Spacing="5">
-      <Button Text="Connect Band"
-              FontSize="Medium"
-              HorizontalOptions="Start"
-              VerticalOptions="Center"
-              IsEnabled="{Binding IsConnected, Converter={StaticResource NegativeConverter}}"
-              Command="{Binding ConnectCommand}"/>
-      <Grid Padding="20,0">
-        <Label Text="{Binding ConnectMessage}"
-               HeightRequest="20"
-               Opacity="0.6"
-               FontSize="Small"/>
+    <!-- Basics Settings Pain-->
+    <ContentView IsVisible="{Binding ShowBasics}">
+      <StackLayout Orientation="Vertical"
+                   Padding="10"
+                   Spacing="10">
+
+        <Label Text="Band Test"
+               FontSize="Large"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"/>
+
+        <StackLayout Orientation="Vertical"
+                     Spacing="5">
+          <Button Text="Connect Band"
+                  FontSize="Medium"
+                  HorizontalOptions="Start"
+                  VerticalOptions="Center"
+                  IsEnabled="{Binding IsConnected, Converter={StaticResource NegativeConverter}}"
+                  Command="{Binding ConnectCommand}"/>
+          <Grid Padding="20,0">
+            <Label Text="{Binding ConnectMessage}"
+                   HeightRequest="20"
+                   Opacity="0.6"
+                   FontSize="Small"/>
+          </Grid>
+        </StackLayout>
+
+        <StackLayout Orientation="Vertical"
+                     Spacing="5">
+          <Label Text="Device Name:"
+                 FontSize="Medium"/>
+          <Grid Padding="20,0">
+            <Label Text="{Binding BandName}"
+                   HeightRequest="20"
+                   FontSize="Small"/>
+          </Grid>
+        </StackLayout>
+
+        <StackLayout Orientation="Vertical"
+                     Spacing="5">
+          <Label Text="Hardware Version:"
+                 FontSize="Medium"/>
+          <Grid Padding="20,0">
+            <Label Text="{Binding HardwareVersion}"
+                   HeightRequest="20"
+                   FontSize="Small"/>
+          </Grid>
+        </StackLayout>
+
+        <StackLayout Orientation="Vertical"
+                     Spacing="5">
+          <Label Text="Firmware Version:"
+                 FontSize="Medium"/>
+          <Grid Padding="20,0">
+            <Label Text="{Binding FirmwareVersion}"
+                   HeightRequest="20"
+                   FontSize="Small"/>
+          </Grid>
+        </StackLayout>
+
+      </StackLayout>
+    </ContentView>
+
+    <!-- Sensor Info Pain-->
+    <ContentView IsVisible="{Binding ShowSensors}">
+      <Grid Padding="10"
+            RowSpacing="10"
+            ColumnSpacing="10">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="100"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Label Text="Detecting"
+               Grid.Column="0"
+               Grid.Row="0"
+               VerticalOptions="Center"
+               FontSize="Medium"/>
+        <Switch IsToggled="{Binding IsSensorDetecting}"
+                Grid.Column="1"
+                Grid.Row="0" />
+
+        <StackLayout Orientation="Horizontal"
+                     Grid.Column="0"
+                     Grid.ColumnSpan="2"
+                     Grid.Row="1"
+                     Spacing="5">
+
+          <Label Text="Accelometer:"
+                 FontSize="Medium"/>
+          <Label Text=""
+                 FontSize="Small"/>
+
+        </StackLayout>
+
       </Grid>
-    </StackLayout>
+    </ContentView>
+  </Grid>
 
-    <StackLayout Orientation="Vertical"
-                 Spacing="5">
-      <Label Text="Device Name:"
-             FontSize="Medium"/>
-      <Grid Padding="20,0">
-        <Label Text="{Binding BandName}"
-               HeightRequest="20"
-               FontSize="Small"/>
-      </Grid>
-    </StackLayout>
-
-    <StackLayout Orientation="Vertical"
-                 Spacing="5">
-      <Label Text="Hardware Version:"
-             FontSize="Medium"/>
-      <Grid Padding="20,0">
-        <Label Text="{Binding HardwareVersion}"
-               HeightRequest="20"
-               FontSize="Small"/>
-      </Grid>
-    </StackLayout>
-
-    <StackLayout Orientation="Vertical"
-                 Spacing="5">
-      <Label Text="Firmware Version:"
-             FontSize="Medium"/>
-      <Grid Padding="20,0">
-        <Label Text="{Binding FirmwareVersion}"
-               HeightRequest="20"
-               FontSize="Small"/>
-      </Grid>
-    </StackLayout>
-
-  </StackLayout>
-  
 </ContentPage>

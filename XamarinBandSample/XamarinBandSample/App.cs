@@ -28,6 +28,11 @@ namespace XamarinBandSample
         public static UnityContainer Container = new UnityContainer();
 
         /// <summary>
+        /// ナビゲーション画面
+        /// </summary>
+        public static NavigationPage Navigation = null;
+
+        /// <summary>
         /// コンストラクタ
         /// </summary>
         static App()
@@ -42,7 +47,8 @@ namespace XamarinBandSample
             // ViewModel をインスタンス化するデフォルトメソッドを指定
             ViewModelLocationProvider.SetDefaultViewModelFactory((type) => Container.Resolve(type));
 
-            this.MainPage = new TopPage();
+            Navigation = new NavigationPage(new TopPage());
+            this.MainPage = Navigation;
         }
 
         /// <summary>
@@ -66,5 +72,4 @@ namespace XamarinBandSample
         {
         }
     }
-
 }

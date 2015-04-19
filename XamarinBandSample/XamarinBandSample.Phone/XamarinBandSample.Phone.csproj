@@ -101,9 +101,15 @@
     <Content Include="Assets\Badge.scale-100.png" />
     <Content Include="Assets\Badge.scale-140.png" />
     <Content Include="Assets\Badge.scale-240.png" />
+    <Content Include="Assets\Icons\BasicsIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Logo.scale-100.png" />
     <Content Include="Assets\Logo.scale-140.png" />
     <Content Include="Assets\Logo.scale-240.png" />
+    <Content Include="Assets\Icons\SensorsIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\SmallLogo.scale-100.png" />
     <Content Include="Assets\SmallLogo.scale-140.png" />
     <Content Include="Assets\SmallLogo.scale-240.png" />
