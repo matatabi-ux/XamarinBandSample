@@ -38,6 +38,7 @@
     <Compile Include="Converters\NegativeConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Triggers\InvokeCommandAction.cs" />
+    <Compile Include="ViewModels\SensorReadingViewModel.cs" />
     <Compile Include="ViewModels\TopPageViewModel.cs" />
     <Compile Include="Views\TopPage.xaml.cs">
       <DependentUpon>TopPage.xaml</DependentUpon>

@@ -93,7 +93,8 @@
     <ContentView IsVisible="{Binding ShowSensors}">
       <Grid Padding="10"
             RowSpacing="10"
-            ColumnSpacing="10">
+            ColumnSpacing="10"
+            BindingContext="{Binding SensorReading}">
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="Auto"/>
@@ -128,8 +129,16 @@
 
           <Label Text="Accelometer:"
                  FontSize="Medium"/>
-          <Label Text=""
-                 FontSize="Small"/>
+          <StackLayout Orientation="Vertical"
+                       Padding="10,0,0,0"
+                       Spacing="10">
+            <Label Text="{Binding AccelerationX, StringFormat='x={0}'}"
+                   FontSize="Small"/>
+            <Label Text="{Binding AccelerationY, StringFormat='y={0}'}"
+                   FontSize="Small"/>
+            <Label Text="{Binding AccelerationZ, StringFormat='z={0}'}"
+                   FontSize="Small"/>
+          </StackLayout>
 
         </StackLayout>
 

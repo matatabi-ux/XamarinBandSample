@@ -35,9 +35,9 @@ namespace XamarinBandSample.Droid.Band
         /// <returns>登録 Band デバイス情報</returns>
         public Task<IBandInfo[]> GetBandsAsync()
         {
-            return Task.FromResult<IBandInfo[]>((
+            return Task.FromResult((
                 from i in Native.BandClientManager.Instance.GetPairedBands()
-                select new NativeBandInfo(i)).ToArray());
+                select new NativeBandInfo(i) as IBandInfo).ToArray());
         }
 
         /// <summary>

@@ -17,7 +17,6 @@ using Microsoft.Band;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Practices.Unity;
-using Xamarin.Forms;
 
 namespace XamarinBandSample.ViewModels
 {
@@ -30,11 +29,6 @@ namespace XamarinBandSample.ViewModels
         /// Microsoft Band デバイス管理クラス
         /// </summary>
         private IBandClientManager manager = null;
-
-        /// <summary>
-        /// Microsoft Band 接続サービスクラス
-        /// </summary>
-        private IBandClient client = null;
 
         #region ShowBasics
 
@@ -144,24 +138,6 @@ namespace XamarinBandSample.ViewModels
 
         #endregion //FirmwareVersion
 
-        #region IsSensorDetecting
-
-        /// <summary>
-        /// センサー監視フラグ
-        /// </summary>
-        private bool isSensorDetecting = false;
-
-        /// <summary>
-        /// センサー監視フラグ
-        /// </summary>
-        public bool IsSensorDetecting
-        {
-            get { return this.isSensorDetecting; }
-            set { this.SetProperty(ref this.isSensorDetecting, value); }
-        }
-
-        #endregion //IsSensorDetecting
-
         #region SelectBasicsCommand
 
         /// <summary>
@@ -189,15 +165,6 @@ namespace XamarinBandSample.ViewModels
 
         #endregion //ConnectCommand
 
-        #region ChangeDetectSensorsCommand
-
-        /// <summary>
-        /// センサー監視切替コマンド
-        /// </summary>
-        public ICommand ChangeDetectSensorsCommand { get; private set; }
-
-        #endregion //ChangeDetectSensorsCommand
-
         #region ConnectMessage
 
         /// <summary>
@@ -216,6 +183,21 @@ namespace XamarinBandSample.ViewModels
 
         #endregion //ConnectMessage
 
+        #region SensorReading
+
+        private SensorReadingViewModel sensorReading = null;
+
+        /// <summary>
+        /// センサー情報
+        /// </summary>
+        public SensorReadingViewModel SensorReading
+        {
+            get { return this.sensorReading; }
+            set { this.SetProperty<SensorReadingViewModel>(ref this.sensorReading, value); }
+        }
+
+        #endregion //SensorReading
+
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -225,9 +207,10 @@ namespace XamarinBandSample.ViewModels
         {
             this.manager = manager;
             this.SelectBasicsCommand = new DelegateCommand(this.SelectBasics, () => { return !this.ShowBasics; });
-            this.SelectSensorsCommand = new DelegateCommand(this.SelectSensors, () => { return !this.ShowSensors; });
+            this.SelectSensorsCommand = DelegateCommand.FromAsyncHandler(this.SelectSensors, () => { return !this.ShowSensors; });
             this.ConnectCommand = DelegateCommand.FromAsyncHandler(this.Connect);
-            this.ChangeDetectSensorsCommand = DelegateCommand<bool>.FromAsyncHandler(this.ChangeDetectSensors);
+
+            App.Container.RegisterType<SensorReadingViewModel>(new ContainerControlledLifetimeManager());
         }
 
         /// <summary>
@@ -244,8 +227,13 @@ namespace XamarinBandSample.ViewModels
         /// <summary>
         /// センサー情報表示切替
         /// </summary>
-        private void SelectSensors()
+        private async Task SelectSensors()
         {
+            if (!this.IsConnected)
+            {
+                await App.Navigation.CurrentPage.DisplayAlert("Warning", "No Microsoft Band connected.", "OK");
+                return;
+            }
             this.ShowBasics = false;
             this.ShowSensors = true;
             ((DelegateCommand)this.SelectBasicsCommand).RaiseCanExecuteChanged();
@@ -268,9 +256,9 @@ namespace XamarinBandSample.ViewModels
 
             var device = devices.First();
             this.ConnectMessage = "Connecting to Band...";
-            this.client = await this.manager.ConnectAsync(device);
+            var client = await this.manager.ConnectAsync(device);
 
-            if (this.client == null)
+            if (client == null)
             {
                 await App.Navigation.CurrentPage.DisplayAlert(
                     "Error",
@@ -278,33 +266,22 @@ namespace XamarinBandSample.ViewModels
                     "OK");
                 return;
             }
+
+            // 別の場所から利用できるように DI コンテナに登録
+            App.Container.RegisterInstance<IBandClient>(client, new ContainerControlledLifetimeManager());
+            App.Container.RegisterInstance<IBandInfo>(device, new ContainerControlledLifetimeManager());
+            this.SensorReading = App.Container.Resolve<SensorReadingViewModel>();
+
             this.ConnectMessage = string.Empty;
             this.BandName = device.Name;
-            this.HardwareVersion = await this.client.GetHardwareVersionAsync();
-            this.FirmwareVersion = await this.client.GetFirmwareVersionAsync();
+            this.HardwareVersion = await client.GetHardwareVersionAsync();
+            this.FirmwareVersion = await client.GetFirmwareVersionAsync();
 
             this.IsConnected = true;
             await App.Navigation.CurrentPage.DisplayAlert(
                 "Connected",
                 string.Format("Microsoft Band '{0}' connected.", device.Name),
                 "OK");
-        }
-
-        /// <summary>
-        /// センサー監視切替
-        /// </summary>
-        /// <param name="detecting">センサー監視フラグ</param>
-        /// <returns>Task</returns>
-        private async Task ChangeDetectSensors(bool detecting)
-        {
-            if (detecting)
-            {
-                //TODO: センサー監視開始処理
-            }
-            else
-            {
-                //TODO: センサー監視終了処理
-            }
         }
     }
 }

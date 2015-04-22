@@ -20,6 +20,8 @@ using global::Microsoft.Band.Notifications;
 using global::Microsoft.Band.Personalization;
 using global::Microsoft.Band.Sensors;
 using global::Microsoft.Band.Tiles;
+using Microsoft.Practices.Unity;
+using XamarinBandSample.iOS.Band.Sensors;
 using Native = ios::Microsoft.Band;
 
 namespace XamarinBandSample.iOS.Band
@@ -41,6 +43,8 @@ namespace XamarinBandSample.iOS.Band
         public NativeBandClient(Native.BandClient client)
         {
             this.client = client;
+
+            App.Container.RegisterInstance<IBandSensorManager>(new NativeBandSensorManager(this.client), new ContainerControlledLifetimeManager());
         }
 
         /// <summary>
@@ -58,6 +62,7 @@ namespace XamarinBandSample.iOS.Band
         /// </summary>
         /// <param name="token">中断トークン</param>
         /// <returns>ファームウェアバージョン</returns>
+        [Obsolete("CancellationToken is not supported for iOS.")]
         public Task<string> GetFirmwareVersionAsync(CancellationToken token)
         {
             return this.GetFirmwareVersionAsync();
@@ -78,35 +83,50 @@ namespace XamarinBandSample.iOS.Band
         /// </summary>
         /// <param name="token">中断トークン</param>
         /// <returns>ハードウェアバージョン</returns>
+        [Obsolete("CancellationToken is not supported for iOS.")]
         public Task<string> GetHardwareVersionAsync(CancellationToken token)
         {
             return this.GetHardwareVersionAsync();
         }
 
-        //TODO:後で実装予定
-
+        /// <summary>
+        /// プッシュ通知管理クラス
+        /// </summary>
         public IBandNotificationManager NotificationManager
         {
-            get { throw new NotImplementedException(); }
+            get { return App.Container.Resolve<IBandNotificationManager>(); }
         }
 
+        /// <summary>
+        /// カスタマイズ設定管理クラス
+        /// </summary>
         public IBandPersonalizationManager PersonalizationManager
         {
-            get { throw new NotImplementedException(); }
+            get { return App.Container.Resolve<IBandPersonalizationManager>(); }
         }
 
+        /// <summary>
+        /// センサー管理クラス
+        /// </summary>
         public IBandSensorManager SensorManager
         {
-            get { throw new NotImplementedException(); }
+            get { return App.Container.Resolve<IBandSensorManager>(); }
         }
 
+        /// <summary>
+        /// タイル管理クラス
+        /// </summary>
         public IBandTileManager TileManager
         {
-            get { throw new NotImplementedException(); }
+            get { return App.Container.Resolve<IBandTileManager>(); }
         }
 
+        /// <summary>
+        /// 破棄処理
+        /// </summary>
         public void Dispose()
         {
+            this.client.Dispose();
         }
     }
 }

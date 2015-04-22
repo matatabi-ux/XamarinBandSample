@@ -89,8 +89,11 @@
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Band\Sensors\NativeBandAcceleromerter.cs" />
     <Compile Include="Band\NativeBandInfo.cs" />
     <Compile Include="Band\NativeBandClient.cs" />
+    <Compile Include="Band\Sensors\NativeBandAccelerometerReading.cs" />
+    <Compile Include="Band\Sensors\NativeBandSensorManager.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Band\NativeBandClientManager.cs" />
