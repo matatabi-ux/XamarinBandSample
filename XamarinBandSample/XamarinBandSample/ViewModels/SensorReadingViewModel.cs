@@ -104,6 +104,94 @@ namespace XamarinBandSample.ViewModels
 
         #endregion //Acceleromerter
 
+        #region Gyroscope
+
+        /// <summary>
+        /// X 軸角速度
+        /// </summary>
+        private double angularVelocityX = 0d;
+
+        /// <summary>
+        /// X 軸角速度
+        /// </summary>
+        public double AngularVelocityX
+        {
+            get { return this.angularVelocityX; }
+            set { this.SetProperty<double>(ref this.angularVelocityX, value); }
+        }
+
+        /// <summary>
+        /// Y 軸角速度
+        /// </summary>
+        private double angularVelocityY = 0d;
+
+        /// <summary>
+        /// Y 軸角速度
+        /// </summary>
+        public double AngularVelocityY
+        {
+            get { return this.angularVelocityY; }
+            set { this.SetProperty<double>(ref this.angularVelocityY, value); }
+        }
+
+        /// <summary>
+        /// Z 軸角速度
+        /// </summary>
+        private double angularVelocityZ = 0d;
+
+        /// <summary>
+        /// Z 軸角速度
+        /// </summary>
+        public double AngularVelocityZ
+        {
+            get { return this.angularVelocityZ; }
+            set { this.SetProperty<double>(ref this.angularVelocityZ, value); }
+        }
+
+        /// <summary>
+        /// X 軸角加速度
+        /// </summary>
+        private double gyroAccelerationX = 0d;
+
+        /// <summary>
+        /// X 軸角加速度
+        /// </summary>
+        public double GyroAccelerationX
+        {
+            get { return this.gyroAccelerationX; }
+            set { this.SetProperty<double>(ref this.gyroAccelerationX, value); }
+        }
+
+        /// <summary>
+        /// Y 軸角加速度
+        /// </summary>
+        private double gyroAccelerationY = 0d;
+
+        /// <summary>
+        /// Y 軸角加速度
+        /// </summary>
+        public double GyroAccelerationY
+        {
+            get { return this.gyroAccelerationY; }
+            set { this.SetProperty<double>(ref this.gyroAccelerationY, value); }
+        }
+
+        /// <summary>
+        /// Z 軸角加速度
+        /// </summary>
+        private double gyroAccelerationZ = 0d;
+
+        /// <summary>
+        /// Z 軸角加速度
+        /// </summary>
+        public double GyroAccelerationZ
+        {
+            get { return this.gyroAccelerationZ; }
+            set { this.SetProperty<double>(ref this.gyroAccelerationZ, value); }
+        }
+
+        #endregion //Gyroscope
+
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -130,16 +218,34 @@ namespace XamarinBandSample.ViewModels
                     await this.client.SensorManager.Accelerometer.StartReadingsAsync();
                     this.client.SensorManager.Accelerometer.ReadingChanged += this.OnAccelerometerReadingChanged;
                 }
+                // ジャイロセンサーの検知開始
+                if (this.client.SensorManager.Gyroscope.IsSupported)
+                {
+                    await this.client.SensorManager.Gyroscope.StartReadingsAsync();
+                    this.client.SensorManager.Gyroscope.ReadingChanged += this.OnGyroscopeReadingChanged;
+                }
             }
             else
             {
-                // 加速度センサーの検知開始
+                // 加速度センサーの検知終了
                 if (this.client.SensorManager.Accelerometer.IsSupported)
                 {
                     await this.client.SensorManager.Accelerometer.StopReadingsAsync();
                     this.AccelerationX = 0d;
                     this.AccelerationY = 0d;
                     this.AccelerationZ = 0d;
+                }
+                // ジャイロセンサーの検知終了
+                if (this.client.SensorManager.Gyroscope.IsSupported)
+                {
+                    await this.client.SensorManager.Gyroscope.StartReadingsAsync();
+                    this.client.SensorManager.Gyroscope.ReadingChanged += this.OnGyroscopeReadingChanged;
+                    this.AngularVelocityX = 0d;
+                    this.AngularVelocityY = 0d;
+                    this.AngularVelocityZ = 0d;
+                    this.GyroAccelerationX = 0d;
+                    this.GyroAccelerationY = 0d;
+                    this.GyroAccelerationZ = 0d;
                 }
             }
         }
@@ -158,6 +264,25 @@ namespace XamarinBandSample.ViewModels
             this.AccelerationX = e.SensorReading.AccelerationX;
             this.AccelerationY = e.SensorReading.AccelerationY;
             this.AccelerationZ = e.SensorReading.AccelerationZ;
+        }
+
+        /// <summary>
+        /// 角速度変更イベントハンドラ
+        /// </summary>
+        /// <param name="sender">イベント発行者</param>
+        /// <param name="e">イベント引数</param>
+        private void OnGyroscopeReadingChanged(object sender, BandSensorReadingEventArgs<IBandGyroscopeReading> e)
+        {
+            if (e == null)
+            {
+                return;
+            }
+            this.AngularVelocityX = e.SensorReading.AngularVelocityX;
+            this.AngularVelocityY = e.SensorReading.AngularVelocityY;
+            this.AngularVelocityZ = e.SensorReading.AngularVelocityZ;
+            this.GyroAccelerationX = e.SensorReading.AccelerationX;
+            this.GyroAccelerationY = e.SensorReading.AccelerationY;
+            this.GyroAccelerationZ = e.SensorReading.AccelerationZ;
         }
     }
 }

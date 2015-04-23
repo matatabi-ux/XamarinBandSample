@@ -90,12 +90,14 @@
     </ContentView>
 
     <!-- Sensor Info Pain-->
-    <ContentView IsVisible="{Binding ShowSensors}">
+    <ScrollView IsVisible="{Binding ShowSensors}"
+                Orientation="Vertical">
       <Grid Padding="10"
             RowSpacing="10"
             ColumnSpacing="10"
             BindingContext="{Binding SensorReading}">
         <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="*"/>
@@ -142,8 +144,35 @@
 
         </StackLayout>
 
+        <StackLayout Orientation="Horizontal"
+                     Grid.Column="0"
+                     Grid.ColumnSpan="2"
+                     Grid.Row="2"
+                     Spacing="5">
+
+          <Label Text="Gyroscope:"
+                 FontSize="Medium"/>
+          <StackLayout Orientation="Vertical"
+                       Padding="10,0,0,0"
+                       Spacing="10">
+            <Label Text="{Binding AngularVelocityX, StringFormat='x={0}'}"
+                   FontSize="Small"/>
+            <Label Text="{Binding AngularVelocityY, StringFormat='y={0}'}"
+                   FontSize="Small"/>
+            <Label Text="{Binding AngularVelocityZ, StringFormat='z={0}'}"
+                   FontSize="Small"/>
+            <Label Text="{Binding GyroAccelerationX, StringFormat='dx={0}'}"
+                   FontSize="Small"/>
+            <Label Text="{Binding GyroAccelerationY, StringFormat='dy={0}'}"
+                   FontSize="Small"/>
+            <Label Text="{Binding GyroAccelerationZ, StringFormat='dz={0}'}"
+                   FontSize="Small"/>
+          </StackLayout>
+
+        </StackLayout>
+
       </Grid>
-    </ContentView>
+    </ScrollView>
   </Grid>
 
 </ContentPage>

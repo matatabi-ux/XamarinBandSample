@@ -27,7 +27,7 @@ namespace XamarinBandSample.iOS.Band.Sensors
     /// <summary>
     /// iOS 用加速度センサー
     /// </summary>
-    public class NativeBandAcceleromerter : IBandSensor<IBandAccelerometerReading>
+    public class NativeBandAcceleromerter : NativeBandSensorBase<IBandAccelerometerReading>
     {
         /// <summary>
         /// 加速度センサー
@@ -35,28 +35,15 @@ namespace XamarinBandSample.iOS.Band.Sensors
         private Native.Sensors.AccelerometerSensor sensor = null;
 
         /// <summary>
-        /// 対応センサー検出インターバル時間
-        /// </summary>
-        private static readonly IEnumerable<TimeSpan> NativeSupportedReportingIntervals = new List<TimeSpan>();
-
-        /// <summary>
-        /// 対応可否フラグ
-        /// </summary>
-        public bool IsSupported 
-        {
-            get { return true; }
-        }
-
-        /// <summary>
         /// センサー値変更イベント
         /// </summary>
-        public event EventHandler<BandSensorReadingEventArgs<IBandAccelerometerReading>> ReadingChanged;
+        public override event EventHandler<BandSensorReadingEventArgs<IBandAccelerometerReading>> ReadingChanged;
 
         /// <summary>
         /// コンストラクタ
         /// </summary>
         /// <param name="manager">Band センサー管理クラス</param>
-        public NativeBandAcceleromerter(Native.Sensors.IBandSensorManager manager)
+        public NativeBandAcceleromerter(Native.Sensors.IBandSensorManager manager) : base(manager)
         {
             this.sensor = Native.Sensors.BandSensorManagerExtensions.CreateAccelerometerSensor(manager);
             this.sensor.ReadingChanged += this.OnReadingChanged;
@@ -80,20 +67,8 @@ namespace XamarinBandSample.iOS.Band.Sensors
         /// <summary>
         /// センサー検知を開始する
         /// </summary>
-        /// <remarks>中断は非対応</remarks>
-        /// <param name="token">中断トークン</param>
         /// <returns>Task</returns>
-        [Obsolete("CancellationToken is not supported for iOS.")]
-        public Task StartReadingsAsync(System.Threading.CancellationToken token)
-        {
-            return this.StartReadingsAsync();
-        }
-
-        /// <summary>
-        /// センサー検知を開始する
-        /// </summary>
-        /// <returns>Task</returns>
-        public Task StartReadingsAsync()
+        public override Task StartReadingsAsync()
         {
             return Task.Run(() => this.sensor.StartReadings());
         }
@@ -101,42 +76,10 @@ namespace XamarinBandSample.iOS.Band.Sensors
         /// <summary>
         /// センサー検知を停止する
         /// </summary>
-        /// <remarks>非対応</remarks>
-        /// <param name="token">中断トークン</param>
         /// <returns>Task</returns>
-        [Obsolete("CancellationToken is not supported for iOS.")]
-        public Task StopReadingsAsync(CancellationToken token)
-        {
-            return this.StopReadingsAsync();
-        }
-
-        /// <summary>
-        /// センサー検知を停止する
-        /// </summary>
-        /// <returns>Task</returns>
-        public Task StopReadingsAsync()
+        public override Task StopReadingsAsync()
         {
             return Task.Run(() => this.sensor.StopReadings());
-        }
-
-        /// <summary>
-        /// 対応センサー検出インターバル時間
-        /// </summary>
-        [Obsolete("SupportedReportingIntervals is not supported for iOS.")]
-        public IEnumerable<TimeSpan> SupportedReportingIntervals
-        {
-            get { return NativeSupportedReportingIntervals; }
-        }
-
-        /// <summary>
-        /// センサー検出インターバル時間
-        /// </summary>
-        /// <remarks>非対応</remarks>
-        [Obsolete("SupportedReportingIntervals is not supported for iOS.")]
-        public TimeSpan ReportingInterval
-        {
-            get { throw new NotSupportedException("Microsoft Band SDK for iOS not supported get or set 'ReportingInterval' property."); }
-            set { throw new NotSupportedException("Microsoft Band SDK for iOS not supported get or set 'ReportingInterval' property."); }
         }
     }
 }

@@ -185,6 +185,9 @@ namespace XamarinBandSample.ViewModels
 
         #region SensorReading
 
+        /// <summary>
+        /// センサー情報
+        /// </summary>
         private SensorReadingViewModel sensorReading = null;
 
         /// <summary>

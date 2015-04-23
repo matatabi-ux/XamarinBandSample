@@ -52,6 +52,8 @@ namespace XamarinBandSample.Droid.Band.Sensors
 
             App.Container.RegisterInstance<IBandSensor<IBandAccelerometerReading>>(
                 new NativeBandAcceleromerter(manager), new ContainerControlledLifetimeManager());
+            App.Container.RegisterInstance<IBandSensor<IBandGyroscopeReading>>(
+                new NativeBandGyroscope(manager), new ContainerControlledLifetimeManager());
         }
 
         /// <summary>

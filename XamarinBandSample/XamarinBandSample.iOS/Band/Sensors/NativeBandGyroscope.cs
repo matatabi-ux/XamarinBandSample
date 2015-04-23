@@ -6,7 +6,7 @@
 //-----------------------------------------------------------------------
 #endregion
 
-extern alias android;
+extern alias ios;
 
 using System;
 using System.Collections.Generic;
@@ -15,33 +15,37 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-using global::Microsoft.Band.Sensors;
-using Native = android::Microsoft.Band;
+using Foundation;
+using global::Microsoft.Band;
+using Microsoft.Band.Sensors;
+using Microsoft.Practices.Unity;
+using Native = ios::Microsoft.Band;
+using UIKit;
 
-namespace XamarinBandSample.Droid.Band.Sensors
+namespace XamarinBandSample.iOS.Band.Sensors
 {
     /// <summary>
-    /// Android 用加速度センサー
+    /// iOS 用ジャイロセンサー
     /// </summary>
-    public class NativeBandAcceleromerter : NativeBandSensorBase<IBandAccelerometerReading>
+    public class NativeBandGyroscope : NativeBandSensorBase<IBandGyroscopeReading>
     {
         /// <summary>
-        /// 加速度センサー
+        /// ジャイロセンサー
         /// </summary>
-        private Native.Sensors.AccelerometerSensor sensor = null;
+        private Native.Sensors.GyroscopeSensor sensor = null;
 
         /// <summary>
         /// センサー値変更イベント
         /// </summary>
-        public override event EventHandler<BandSensorReadingEventArgs<IBandAccelerometerReading>> ReadingChanged;
+        public override event EventHandler<BandSensorReadingEventArgs<IBandGyroscopeReading>> ReadingChanged;
 
         /// <summary>
         /// コンストラクタ
         /// </summary>
         /// <param name="manager">Band センサー管理クラス</param>
-        public NativeBandAcceleromerter(Native.Sensors.IBandSensorManager manager) : base(manager)
+        public NativeBandGyroscope(Native.Sensors.IBandSensorManager manager) : base(manager)
         {
-            this.sensor = Native.Sensors.BandSensorManagerExtensions.CreateAccelerometerSensor(manager);
+            this.sensor = Native.Sensors.BandSensorManagerExtensions.CreateGyroscopeSensor(manager);
             this.sensor.ReadingChanged += this.OnReadingChanged;
         }
 
@@ -50,14 +54,14 @@ namespace XamarinBandSample.Droid.Band.Sensors
         /// </summary>
         /// <param name="sender">イベント発行者</param>
         /// <param name="e">イベント引数</param>
-        private void OnReadingChanged(object sender, Native.Sensors.IBandSensorEventEventArgs<Native.Sensors.IBandAccelerometerEvent> e)
+        protected void OnReadingChanged(object sender, Native.Sensors.BandSensorDataEventArgs<Native.Sensors.BandSensorGyroscopeData> e)
         {
             if (this.ReadingChanged == null)
             {
                 return;
             }
             this.ReadingChanged.Invoke(
-                this, new BandSensorReadingEventArgs<IBandAccelerometerReading>(new NativeBandAccelerometerReading(e.SensorReading)));
+                this, new BandSensorReadingEventArgs<IBandGyroscopeReading>(new NativeBandGyroscopeReading(e.SensorReading)));
         }
 
         /// <summary>
@@ -66,7 +70,7 @@ namespace XamarinBandSample.Droid.Band.Sensors
         /// <returns>Task</returns>
         public override Task StartReadingsAsync()
         {
-            return this.sensor.StartReadingsTaskAsync(this.GetSampleRate());
+            return Task.Run(() => this.sensor.StartReadings());
         }
 
         /// <summary>
@@ -75,7 +79,7 @@ namespace XamarinBandSample.Droid.Band.Sensors
         /// <returns>Task</returns>
         public override Task StopReadingsAsync()
         {
-            return this.sensor.StopReadingsTaskAsync();
+            return Task.Run(() => this.sensor.StopReadings());
         }
     }
 }
