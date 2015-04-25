@@ -101,6 +101,7 @@
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
           <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -190,7 +191,24 @@
           </StackLayout>
 
         </StackLayout>
-        
+
+        <StackLayout Orientation="Horizontal"
+                     Grid.Column="0"
+                     Grid.ColumnSpan="2"
+                     Grid.Row="4"
+                     Spacing="5">
+
+          <Label Text="Pedmeter:"
+                 FontSize="Medium"/>
+          <StackLayout Orientation="Vertical"
+                       Padding="10,0,0,0"
+                       Spacing="10">
+            <Label Text="{Binding TotalSteps, StringFormat='steps={0}'}"
+                   FontSize="Small"/>
+          </StackLayout>
+
+        </StackLayout>
+
       </Grid>
     </ScrollView>
   </Grid>

@@ -224,6 +224,24 @@ namespace XamarinBandSample.ViewModels
 
         #endregion //HeartRateSensor
 
+        #region Pedometer
+
+        /// <summary>
+        /// 歩数合計
+        /// </summary>
+        private long totalSteps = 0;
+
+        /// <summary>
+        /// 歩数合計
+        /// </summary>
+        public long TotalSteps
+        {
+            get { return this.totalSteps; }
+            set { this.SetProperty<long>(ref this.totalSteps, value); }
+        }
+
+        #endregion //Pedometer
+
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -262,6 +280,12 @@ namespace XamarinBandSample.ViewModels
                     await this.client.SensorManager.HeartRate.StartReadingsAsync();
                     this.client.SensorManager.HeartRate.ReadingChanged += this.OnHeartRateReadingChanged;
                 }
+                // 歩数の検知開始
+                if (this.client.SensorManager.Pedometer.IsSupported)
+                {
+                    await this.client.SensorManager.Pedometer.StartReadingsAsync();
+                    this.client.SensorManager.Pedometer.ReadingChanged += this.OnPedometerReadingChanged;
+                }
             }
             else
             {
@@ -293,6 +317,13 @@ namespace XamarinBandSample.ViewModels
                     this.client.SensorManager.HeartRate.ReadingChanged -= this.OnHeartRateReadingChanged;
                     this.HeartRate = 0;
                     this.HeartRateQuality = HeartRateQuality.Acquiring;
+                }
+                // 歩数の検知開始
+                if (this.client.SensorManager.Pedometer.IsSupported)
+                {
+                    await this.client.SensorManager.Pedometer.StopReadingsAsync();
+                    this.client.SensorManager.Pedometer.ReadingChanged -= this.OnPedometerReadingChanged;
+                    this.TotalSteps = 0L;
                 }
             }
         }
@@ -345,6 +376,20 @@ namespace XamarinBandSample.ViewModels
             }
             this.HeartRate = e.SensorReading.HeartRate;
             this.HeartRateQuality = e.SensorReading.Quality;
+        }
+
+        /// <summary>
+        /// 歩数変更イベントハンドラ
+        /// </summary>
+        /// <param name="sender">イベント発行者</param>
+        /// <param name="e">イベント引数</param>
+        private void OnPedometerReadingChanged(object sender, BandSensorReadingEventArgs<IBandPedometerReading> e)
+        {
+            if (e == null)
+            {
+                return;
+            }
+            this.TotalSteps = e.SensorReading.TotalSteps;
         }
     }
 }

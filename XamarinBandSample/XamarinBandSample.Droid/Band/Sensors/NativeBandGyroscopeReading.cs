@@ -29,11 +29,10 @@ using global::Microsoft.Band.Tiles;
 using Microsoft.Practices.Unity;
 using Native = android::Microsoft.Band;
 
-
 namespace XamarinBandSample.Droid.Band.Sensors
 {
     /// <summary>
-    ///  Android 用角速度データ
+    /// Android 用角速度データ
     /// </summary>
     class NativeBandGyroscopeReading : IBandGyroscopeReading
     {

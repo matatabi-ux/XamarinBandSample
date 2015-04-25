@@ -46,6 +46,8 @@ namespace XamarinBandSample.iOS.Band.Sensors
                 new NativeBandGyroscope(manager), new ContainerControlledLifetimeManager());
             App.Container.RegisterInstance<IBandSensor<IBandHeartRateReading>>(
                 new NativeBandHeartRateSensor(manager), new ContainerControlledLifetimeManager());
+            App.Container.RegisterInstance<IBandSensor<IBandPedometerReading>>(
+                new NativeBandPedometer(manager), new ContainerControlledLifetimeManager());
         }
 
         /// <summary>
