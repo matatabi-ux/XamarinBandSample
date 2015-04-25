@@ -95,6 +95,8 @@
     <Compile Include="Band\Sensors\NativeBandAccelerometerReading.cs" />
     <Compile Include="Band\Sensors\NativeBandGyroscope.cs" />
     <Compile Include="Band\Sensors\NativeBandGyroscopeReading.cs" />
+    <Compile Include="Band\Sensors\NativeBandHeartRateReading.cs" />
+    <Compile Include="Band\Sensors\NativeBandHeartRateSensor.cs" />
     <Compile Include="Band\Sensors\NativeBandSensorBase.cs" />
     <Compile Include="Band\Sensors\NativeBandSensorManager.cs" />
     <Compile Include="Main.cs" />

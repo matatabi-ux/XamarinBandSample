@@ -192,6 +192,38 @@ namespace XamarinBandSample.ViewModels
 
         #endregion //Gyroscope
 
+        #region HeartRateSensor
+
+        /// <summary>
+        /// 心拍数
+        /// </summary>
+        private int heartRate = 0;
+
+        /// <summary>
+        /// 心拍数
+        /// </summary>
+        public int HeartRate
+        {
+            get { return this.heartRate; }
+            set { this.SetProperty<int>(ref this.heartRate, value); }
+        }
+
+        /// <summary>
+        /// 心拍計測状況
+        /// </summary>
+        private HeartRateQuality heartRateQuality = HeartRateQuality.Acquiring;
+
+        /// <summary>
+        /// 心拍計測状況
+        /// </summary>
+        public HeartRateQuality HeartRateQuality
+        {
+            get { return this.heartRateQuality; }
+            set { this.SetProperty<HeartRateQuality>(ref this.heartRateQuality, value); }
+        }
+
+        #endregion //HeartRateSensor
+
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -224,6 +256,12 @@ namespace XamarinBandSample.ViewModels
                     await this.client.SensorManager.Gyroscope.StartReadingsAsync();
                     this.client.SensorManager.Gyroscope.ReadingChanged += this.OnGyroscopeReadingChanged;
                 }
+                // 心拍数の検知開始
+                if (this.client.SensorManager.HeartRate.IsSupported)
+                {
+                    await this.client.SensorManager.HeartRate.StartReadingsAsync();
+                    this.client.SensorManager.HeartRate.ReadingChanged += this.OnHeartRateReadingChanged;
+                }
             }
             else
             {
@@ -231,6 +269,7 @@ namespace XamarinBandSample.ViewModels
                 if (this.client.SensorManager.Accelerometer.IsSupported)
                 {
                     await this.client.SensorManager.Accelerometer.StopReadingsAsync();
+                    this.client.SensorManager.Accelerometer.ReadingChanged -= this.OnAccelerometerReadingChanged;
                     this.AccelerationX = 0d;
                     this.AccelerationY = 0d;
                     this.AccelerationZ = 0d;
@@ -238,14 +277,22 @@ namespace XamarinBandSample.ViewModels
                 // ジャイロセンサーの検知終了
                 if (this.client.SensorManager.Gyroscope.IsSupported)
                 {
-                    await this.client.SensorManager.Gyroscope.StartReadingsAsync();
-                    this.client.SensorManager.Gyroscope.ReadingChanged += this.OnGyroscopeReadingChanged;
+                    await this.client.SensorManager.Gyroscope.StopReadingsAsync();
+                    this.client.SensorManager.Gyroscope.ReadingChanged -= this.OnGyroscopeReadingChanged;
                     this.AngularVelocityX = 0d;
                     this.AngularVelocityY = 0d;
                     this.AngularVelocityZ = 0d;
                     this.GyroAccelerationX = 0d;
                     this.GyroAccelerationY = 0d;
                     this.GyroAccelerationZ = 0d;
+                }
+                // 心拍数の検知終了
+                if (this.client.SensorManager.HeartRate.IsSupported)
+                {
+                    await this.client.SensorManager.HeartRate.StopReadingsAsync();
+                    this.client.SensorManager.HeartRate.ReadingChanged -= this.OnHeartRateReadingChanged;
+                    this.HeartRate = 0;
+                    this.HeartRateQuality = HeartRateQuality.Acquiring;
                 }
             }
         }
@@ -283,6 +330,21 @@ namespace XamarinBandSample.ViewModels
             this.GyroAccelerationX = e.SensorReading.AccelerationX;
             this.GyroAccelerationY = e.SensorReading.AccelerationY;
             this.GyroAccelerationZ = e.SensorReading.AccelerationZ;
+        }
+
+        /// <summary>
+        /// 心拍数変更イベントハンドラ
+        /// </summary>
+        /// <param name="sender">イベント発行者</param>
+        /// <param name="e">イベント引数</param>
+        private void OnHeartRateReadingChanged(object sender, BandSensorReadingEventArgs<IBandHeartRateReading> e)
+        {
+            if (e == null)
+            {
+                return;
+            }
+            this.HeartRate = e.SensorReading.HeartRate;
+            this.HeartRateQuality = e.SensorReading.Quality;
         }
     }
 }
