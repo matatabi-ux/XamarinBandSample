@@ -58,6 +58,14 @@ namespace XamarinBandSample.Droid.Band.Sensors
                 new NativeBandHeartRateSensor(manager), new ContainerControlledLifetimeManager());
             App.Container.RegisterInstance<IBandSensor<IBandPedometerReading>>(
                 new NativeBandPedometer(manager), new ContainerControlledLifetimeManager());
+            App.Container.RegisterInstance<IBandSensor<IBandDistanceReading>>(
+                new NativeBandDistanceSensor(manager), new ContainerControlledLifetimeManager());
+            App.Container.RegisterInstance<IBandSensor<IBandSkinTemperatureReading>>(
+                new NativeBandSkinTemperatureSensor(manager), new ContainerControlledLifetimeManager());
+            App.Container.RegisterInstance<IBandSensor<IBandUltravioletLightReading>>(
+                new NativeBandUltravioletLightSensor(manager), new ContainerControlledLifetimeManager());
+            App.Container.RegisterInstance<IBandSensor<IBandContactReading>>(
+                new NativeBandContactSensor(manager), new ContainerControlledLifetimeManager());
         }
 
         /// <summary>
@@ -69,7 +77,7 @@ namespace XamarinBandSample.Droid.Band.Sensors
         }
 
         /// <summary>
-        /// Galvanic 肌反応 (GSR) センサー
+        /// 着用状態センサー
         /// </summary>
         public IBandContactSensor Contact
         {

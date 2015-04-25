@@ -99,6 +99,10 @@
     <Compile Include="Band\NativeBandClient.cs" />
     <Compile Include="Band\Sensors\NativeBandAcceleromerter.cs" />
     <Compile Include="Band\Sensors\NativeBandAccelerometerReading.cs" />
+    <Compile Include="Band\Sensors\NativeBandContactReading.cs" />
+    <Compile Include="Band\Sensors\NativeBandContactSensor.cs" />
+    <Compile Include="Band\Sensors\NativeBandDistanceReading.cs" />
+    <Compile Include="Band\Sensors\NativeBandDistanceSensor.cs" />
     <Compile Include="Band\Sensors\NativeBandGyroscope.cs" />
     <Compile Include="Band\Sensors\NativeBandGyroscopeReading.cs" />
     <Compile Include="Band\Sensors\NativeBandHeartRateSensor.cs" />
@@ -107,6 +111,10 @@
     <Compile Include="Band\Sensors\NativeBandSensorBase.cs" />
     <Compile Include="Band\Sensors\NativeBandSensorManager.cs" />
     <Compile Include="Band\Sensors\NativeBandHeartRateReading.cs" />
+    <Compile Include="Band\Sensors\NativeBandSkinTemperatureReading.cs" />
+    <Compile Include="Band\Sensors\NativeBandSkinTemperatureSensor.cs" />
+    <Compile Include="Band\Sensors\NativeBandUltravioletLightSensor.cs" />
+    <Compile Include="Band\Sensors\NativeBandUltravioletLightReading.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

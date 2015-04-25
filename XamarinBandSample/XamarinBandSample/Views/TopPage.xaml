@@ -102,6 +102,7 @@
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
           <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -198,7 +199,7 @@
                      Grid.Row="4"
                      Spacing="5">
 
-          <Label Text="Pedmeter:"
+          <Label Text="Pedometer:"
                  FontSize="Medium"/>
           <StackLayout Orientation="Vertical"
                        Padding="10,0,0,0"
@@ -209,6 +210,29 @@
 
         </StackLayout>
 
+        <StackLayout Orientation="Horizontal"
+                     Grid.Column="0"
+                     Grid.ColumnSpan="2"
+                     Grid.Row="5"
+                     Spacing="5">
+
+          <Label Text="Distance:"
+                 FontSize="Medium"/>
+          <StackLayout Orientation="Vertical"
+                       Padding="10,0,0,0"
+                       Spacing="10">
+            <Label Text="{Binding CurrentMotion, StringFormat='motion={0}'}"
+                   FontSize="Small"/>
+            <Label Text="{Binding Pace, StringFormat='pace={0}'}"
+                   FontSize="Small"/>
+            <Label Text="{Binding Speed, StringFormat='speed={0}'}"
+                   FontSize="Small"/>
+            <Label Text="{Binding TotalDistance, StringFormat='distance={0}'}"
+                   FontSize="Small"/>
+          </StackLayout>
+
+        </StackLayout>
+        
       </Grid>
     </ScrollView>
   </Grid>

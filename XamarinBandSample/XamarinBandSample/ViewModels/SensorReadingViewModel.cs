@@ -242,6 +242,120 @@ namespace XamarinBandSample.ViewModels
 
         #endregion //Pedometer
 
+        #region DistanceSensor
+
+        /// <summary>
+        /// 移動状態
+        /// </summary>
+        private MotionType currentMotion = MotionType.Unknown;
+
+        /// <summary>
+        /// 移動状態
+        /// </summary>
+        public MotionType CurrentMotion
+        {
+            get { return this.currentMotion; }
+            set { this.SetProperty<MotionType>(ref this.currentMotion, value); }
+        }
+
+        /// <summary>
+        /// 移動ペース
+        /// </summary>
+        private double pace = 0d;
+
+        /// <summary>
+        /// 移動ペース
+        /// </summary>
+        public double Pace
+        {
+            get { return this.pace; }
+            set { this.SetProperty<double>(ref this.pace, value); }
+        }
+
+        /// <summary>
+        /// 移動速度
+        /// </summary>
+        private double speed = 0d;
+
+        /// <summary>
+        /// 移動速度
+        /// </summary>
+        public double Speed
+        {
+            get { return this.speed; }
+            set { this.SetProperty<double>(ref this.speed, value); }
+        }
+
+        /// <summary>
+        /// 移動距離合計
+        /// </summary>
+        private long totalDistance = 0L;
+
+        /// <summary>
+        /// 移動距離合計
+        /// </summary>
+        public long TotalDistance
+        {
+            get { return this.totalDistance; }
+            set { this.SetProperty<long>(ref this.totalDistance, value); }
+        }
+
+        #endregion //DistanceSensor
+
+        #region SkinTemperatureSensor
+
+        /// <summary>
+        /// 肌温度
+        /// </summary>
+        private double skinTempature = 0;
+
+        /// <summary>
+        /// 肌温度
+        /// </summary>
+        public double SkinTemperature
+        {
+            get { return this.skinTempature; }
+            set { this.SetProperty<double>(ref this.skinTempature, value); }
+        }
+
+        #endregion //SkinTemperatureSensor
+
+        #region UVSensor
+
+        /// <summary>
+        /// 紫外線レベル
+        /// </summary>
+        private UltravioletExposureLevel exposureLevel = 0;
+
+        /// <summary>
+        /// 紫外線レベル
+        /// </summary>
+        public UltravioletExposureLevel ExposureLevel
+        {
+            get { return this.exposureLevel; }
+            set { this.SetProperty<UltravioletExposureLevel>(ref this.exposureLevel, value); }
+        }
+
+        #endregion //UVSensor
+
+        #region ContactSensor
+
+        /// <summary>
+        /// 着用状態
+        /// </summary>
+        private BandContactState contactState = 0;
+
+        /// <summary>
+        /// 着用状態
+        /// </summary>
+        public BandContactState ContactState
+        {
+            get { return this.contactState; }
+            set { this.SetProperty<BandContactState>(ref this.contactState, value); }
+        }
+
+        #endregion //ContactSensor
+
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -286,6 +400,12 @@ namespace XamarinBandSample.ViewModels
                     await this.client.SensorManager.Pedometer.StartReadingsAsync();
                     this.client.SensorManager.Pedometer.ReadingChanged += this.OnPedometerReadingChanged;
                 }
+                // 移動距離の検知開始
+                if (this.client.SensorManager.Distance.IsSupported)
+                {
+                    await this.client.SensorManager.Distance.StartReadingsAsync();
+                    this.client.SensorManager.Distance.ReadingChanged += this.OnDistanceReadingChanged;
+                }
             }
             else
             {
@@ -318,12 +438,22 @@ namespace XamarinBandSample.ViewModels
                     this.HeartRate = 0;
                     this.HeartRateQuality = HeartRateQuality.Acquiring;
                 }
-                // 歩数の検知開始
+                // 歩数の検知終了
                 if (this.client.SensorManager.Pedometer.IsSupported)
                 {
                     await this.client.SensorManager.Pedometer.StopReadingsAsync();
                     this.client.SensorManager.Pedometer.ReadingChanged -= this.OnPedometerReadingChanged;
                     this.TotalSteps = 0L;
+                }
+                // 移動距離の検知終了
+                if (this.client.SensorManager.Distance.IsSupported)
+                {
+                    await this.client.SensorManager.Distance.StopReadingsAsync();
+                    this.client.SensorManager.Distance.ReadingChanged -= this.OnDistanceReadingChanged;
+                    this.CurrentMotion = MotionType.Unknown;
+                    this.Pace = 0d;
+                    this.Speed = 0d;
+                    this.TotalDistance = 0L;
                 }
             }
         }
@@ -390,6 +520,23 @@ namespace XamarinBandSample.ViewModels
                 return;
             }
             this.TotalSteps = e.SensorReading.TotalSteps;
+        }
+
+        /// <summary>
+        /// 移動距離変更イベントハンドラ
+        /// </summary>
+        /// <param name="sender">イベント発行者</param>
+        /// <param name="e">イベント引数</param>
+        private void OnDistanceReadingChanged(object sender, BandSensorReadingEventArgs<IBandDistanceReading> e)
+        {
+            if (e == null)
+            {
+                return;
+            }
+            this.CurrentMotion = e.SensorReading.CurrentMotion;
+            this.Pace = e.SensorReading.Pace;
+            this.Speed = e.SensorReading.Speed;
+            this.TotalDistance = e.SensorReading.TotalDistance;
         }
     }
 }
