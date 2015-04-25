@@ -64,7 +64,7 @@ namespace XamarinBandSample.Droid.Band.Sensors
                 new NativeBandSkinTemperatureSensor(manager), new ContainerControlledLifetimeManager());
             App.Container.RegisterInstance<IBandSensor<IBandUltravioletLightReading>>(
                 new NativeBandUltravioletLightSensor(manager), new ContainerControlledLifetimeManager());
-            App.Container.RegisterInstance<IBandSensor<IBandContactReading>>(
+            App.Container.RegisterInstance<IBandContactSensor>(
                 new NativeBandContactSensor(manager), new ContainerControlledLifetimeManager());
         }
 

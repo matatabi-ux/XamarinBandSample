@@ -407,10 +407,22 @@ namespace XamarinBandSample.ViewModels
                     this.client.SensorManager.Distance.ReadingChanged += this.OnDistanceReadingChanged;
                 }
                 // 肌温度の検知開始
-                if (this.client.SensorManager.Distance.IsSupported)
+                if (this.client.SensorManager.SkinTemperature.IsSupported)
                 {
                     await this.client.SensorManager.SkinTemperature.StartReadingsAsync();
                     this.client.SensorManager.SkinTemperature.ReadingChanged += this.OnSkinTemperatureReadingChanged;
+                }
+                // 紫外線レベルの検知開始
+                if (this.client.SensorManager.Ultraviolet.IsSupported)
+                {
+                    await this.client.SensorManager.Ultraviolet.StartReadingsAsync();
+                    this.client.SensorManager.Ultraviolet.ReadingChanged += this.OnUltravioletReadingChanged;
+                }
+                // 着用状態の検知開始
+                if (this.client.SensorManager.Contact.IsSupported)
+                {
+                    await this.client.SensorManager.Contact.StartReadingsAsync();
+                    this.client.SensorManager.Contact.ReadingChanged += this.OnContactReadingChanged;
                 }
             }
             else
@@ -462,11 +474,25 @@ namespace XamarinBandSample.ViewModels
                     this.TotalDistance = 0L;
                 }
                 // 肌温度の検知開始
-                if (this.client.SensorManager.Distance.IsSupported)
+                if (this.client.SensorManager.SkinTemperature.IsSupported)
                 {
                     await this.client.SensorManager.SkinTemperature.StopReadingsAsync();
                     this.client.SensorManager.SkinTemperature.ReadingChanged -= this.OnSkinTemperatureReadingChanged;
                     this.SkinTemperature = 0d;
+                }
+                // 紫外線レベルの検知終了
+                if (this.client.SensorManager.Ultraviolet.IsSupported)
+                {
+                    await this.client.SensorManager.Ultraviolet.StopReadingsAsync();
+                    this.client.SensorManager.Ultraviolet.ReadingChanged -= this.OnUltravioletReadingChanged;
+                    this.ExposureLevel = UltravioletExposureLevel.None;
+                }
+                // 着用状態の検知終了
+                if (this.client.SensorManager.Contact.IsSupported)
+                {
+                    await this.client.SensorManager.Contact.StopReadingsAsync();
+                    this.client.SensorManager.Contact.ReadingChanged -= this.OnContactReadingChanged;
+                    this.ContactState = BandContactState.NotWorn;
                 }
             }
         }
@@ -564,6 +590,34 @@ namespace XamarinBandSample.ViewModels
                 return;
             }
             this.SkinTemperature = e.SensorReading.Temperature;
+        }
+
+        /// <summary>
+        /// 紫外線レベル変更イベントハンドラ
+        /// </summary>
+        /// <param name="sender">イベント発行者</param>
+        /// <param name="e">イベント引数</param>
+        private void OnUltravioletReadingChanged(object sender, BandSensorReadingEventArgs<IBandUltravioletLightReading> e)
+        {
+            if (e == null)
+            {
+                return;
+            }
+            this.ExposureLevel = e.SensorReading.ExposureLevel;
+        }
+
+        /// <summary>
+        /// 着用状態変更イベントハンドラ
+        /// </summary>
+        /// <param name="sender">イベント発行者</param>
+        /// <param name="e">イベント引数</param>
+        private void OnContactReadingChanged(object sender, BandSensorReadingEventArgs<IBandContactReading> e)
+        {
+            if (e == null)
+            {
+                return;
+            }
+            this.ContactState = e.SensorReading.State;
         }
     }
 }

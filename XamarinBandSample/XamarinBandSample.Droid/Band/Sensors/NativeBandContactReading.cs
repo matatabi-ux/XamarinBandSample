@@ -32,7 +32,7 @@ using Native = android::Microsoft.Band;
 namespace XamarinBandSample.Droid.Band.Sensors
 {
     /// <summary>
-    /// Android 用着用状態センサー
+    /// Android 用着用状態
     /// </summary>
     public class NativeBandContactReading : IBandContactReading
     {

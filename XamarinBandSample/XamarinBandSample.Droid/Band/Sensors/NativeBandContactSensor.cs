@@ -32,14 +32,19 @@ using Native = android::Microsoft.Band;
 namespace XamarinBandSample.Droid.Band.Sensors
 {
     /// <summary>
-    /// Android 用着上状態センサー
+    /// Android 用着用状態センサー
     /// </summary>
-    public class NativeBandContactSensor : NativeBandSensorBase<IBandContactReading>
+    public class NativeBandContactSensor : NativeBandSensorBase<IBandContactReading>, IBandContactSensor
     {
         /// <summary>
         /// 着用状態センサー
         /// </summary>
         private Native.Sensors.ContactSensor sensor = null;
+
+        /// <summary>
+        /// 現在の着用状態
+        /// </summary>
+        private IBandContactReading contactReading = null;
 
         /// <summary>
         /// センサー値変更イベント
@@ -68,8 +73,16 @@ namespace XamarinBandSample.Droid.Band.Sensors
             {
                 return;
             }
+            if (this.ReadingChanged == null)
+            {
+                return;
+            }
+            var args = new BandSensorReadingEventArgs<IBandContactReading>(new NativeBandContactReading(e.SensorReading));
+            this.contactReading = args.SensorReading;
             this.ReadingChanged.Invoke(
-                this, new BandSensorReadingEventArgs<IBandContactReading>(new NativeBandContactReading(e.SensorReading)));
+                this, args);
+            this.ReadingChanged.Invoke(
+                this, args);
         }
 
         /// <summary>
@@ -88,6 +101,15 @@ namespace XamarinBandSample.Droid.Band.Sensors
         public override Task StopReadingsAsync()
         {
             return this.sensor.StopReadingsTaskAsync();
+        }
+
+        /// <summary>
+        /// 現在の状態を取得する
+        /// </summary>
+        /// <returns>現在の状態</returns>
+        public Task<IBandContactReading> GetCurrentStateAsync()
+        {
+            return Task.FromResult<IBandContactReading>(this.contactReading);
         }
     }
 }

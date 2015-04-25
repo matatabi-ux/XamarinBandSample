@@ -25,7 +25,7 @@ using UIKit;
 namespace XamarinBandSample.iOS.Band.Sensors
 {
     /// <summary>
-    /// iOS 用着用状態センサー
+    /// iOS 用着用状態
     /// </summary>
     public class NativeBandContactReading : IBandContactReading
     {
@@ -53,5 +53,4 @@ namespace XamarinBandSample.iOS.Band.Sensors
         /// </summary>
         public BandContactState State { get; private set; }
     }
-
 }
