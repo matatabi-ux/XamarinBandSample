@@ -406,6 +406,12 @@ namespace XamarinBandSample.ViewModels
                     await this.client.SensorManager.Distance.StartReadingsAsync();
                     this.client.SensorManager.Distance.ReadingChanged += this.OnDistanceReadingChanged;
                 }
+                // 肌温度の検知開始
+                if (this.client.SensorManager.Distance.IsSupported)
+                {
+                    await this.client.SensorManager.SkinTemperature.StartReadingsAsync();
+                    this.client.SensorManager.SkinTemperature.ReadingChanged += this.OnSkinTemperatureReadingChanged;
+                }
             }
             else
             {
@@ -454,6 +460,13 @@ namespace XamarinBandSample.ViewModels
                     this.Pace = 0d;
                     this.Speed = 0d;
                     this.TotalDistance = 0L;
+                }
+                // 肌温度の検知開始
+                if (this.client.SensorManager.Distance.IsSupported)
+                {
+                    await this.client.SensorManager.SkinTemperature.StopReadingsAsync();
+                    this.client.SensorManager.SkinTemperature.ReadingChanged -= this.OnSkinTemperatureReadingChanged;
+                    this.SkinTemperature = 0d;
                 }
             }
         }
@@ -537,6 +550,20 @@ namespace XamarinBandSample.ViewModels
             this.Pace = e.SensorReading.Pace;
             this.Speed = e.SensorReading.Speed;
             this.TotalDistance = e.SensorReading.TotalDistance;
+        }
+
+        /// <summary>
+        /// 肌温度変更イベントハンドラ
+        /// </summary>
+        /// <param name="sender">イベント発行者</param>
+        /// <param name="e">イベント引数</param>
+        private void OnSkinTemperatureReadingChanged(object sender, BandSensorReadingEventArgs<IBandSkinTemperatureReading> e)
+        {
+            if (e == null)
+            {
+                return;
+            }
+            this.SkinTemperature = e.SensorReading.Temperature;
         }
     }
 }

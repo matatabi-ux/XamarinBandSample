@@ -232,7 +232,24 @@
           </StackLayout>
 
         </StackLayout>
-        
+
+        <StackLayout Orientation="Horizontal"
+                     Grid.Column="0"
+                     Grid.ColumnSpan="2"
+                     Grid.Row="6"
+                     Spacing="5">
+
+          <Label Text="Skin Temperature:"
+                 FontSize="Medium"/>
+          <StackLayout Orientation="Vertical"
+                       Padding="10,0,0,0"
+                       Spacing="10">
+            <Label Text="{Binding SkinTemperature, StringFormat='temperature={0}'}"
+                   FontSize="Small"/>
+          </StackLayout>
+
+        </StackLayout>
+
       </Grid>
     </ScrollView>
   </Grid>
