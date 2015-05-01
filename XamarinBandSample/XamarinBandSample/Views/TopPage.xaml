@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:cv="clr-namespace:XamarinBandSample.Converters;assembly=XamarinBandSample"
+             xmlns:c="clr-namespace:XamarinBandSample.Controls;assembly=XamarinBandSample"
              xmlns:t="clr-namespace:XamarinBandSample.Triggers;assembly=XamarinBandSample"
              xmlns:prismmvvm="clr-namespace:Prism.Mvvm;assembly=XamarinBandSample"
              prismmvvm:ViewModelLocator.AutoWireViewModel="true"
@@ -9,6 +10,7 @@
   <ContentPage.Resources>
     <ResourceDictionary>
       <cv:NegativeConverter x:Key="NegativeConverter"/>
+      <cv:ColorConverter x:Key="ColorConverter"/>
     </ResourceDictionary>
   </ContentPage.Resources>
   <ContentPage.Padding>
@@ -21,6 +23,9 @@
     </ToolbarItem>
     <ToolbarItem Text="Sensors"
                  Command="{Binding SelectSensorsCommand}">
+    </ToolbarItem>
+    <ToolbarItem Text="Personalize"
+                 Command="{Binding SelectPersonalizeCommand}">
     </ToolbarItem>
   </ContentPage.ToolbarItems>
 
@@ -122,7 +127,7 @@
                 Grid.Row="0">
           <Switch.Triggers>
             <EventTrigger Event="Toggled">
-              <t:InvokeCommandAction Command="{Binding ChangeDetectSensorsCommand}" 
+              <t:InvokeCommandAction Command="{Binding ChangeDetectSensorsCommand}"
                                      CommandParameter="{Binding IsSensorDetecting}"/>
             </EventTrigger>
           </Switch.Triggers>
@@ -288,6 +293,96 @@
         </StackLayout>
 
       </Grid>
+    </ScrollView>
+
+    <!-- Persomalize Info Pain-->
+    <ScrollView IsVisible="{Binding ShowPersonalize}"
+                Orientation="Vertical">
+      <StackLayout Orientation="Vertical"
+                   BindingContext="{Binding Personalize}"
+                   Padding="10"
+                   Spacing="10"
+                   VerticalOptions="StartAndExpand">
+        <StackLayout Orientation="Horizontal"
+                     BindingContext="{Binding BaseColor}"
+                     Spacing="10">
+          <Label Text="Base" 
+                 WidthRequest="100"
+                 FontSize="Small"/>
+          <BoxView WidthRequest="30"
+                   HeightRequest="30"
+                   BackgroundColor="{Binding Color, Converter={StaticResource ColorConverter}}"/>
+          <c:BindablePicker ItemsSource="{Binding ColorLabelSelection}"
+                            SelectedIndex="{Binding SelecedIndex, Mode=TwoWay}"/>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal"
+                     BindingContext="{Binding HighContrastColor}"
+                     Spacing="10">
+          <Label Text="HighContrast"
+                 WidthRequest="100"
+                 FontSize="Small"/>
+          <BoxView WidthRequest="30"
+                   HeightRequest="30"
+                   BackgroundColor="{Binding Color, Converter={StaticResource ColorConverter}}"/>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal"
+                     BindingContext="{Binding HighlightColor}"
+                     Spacing="10">
+          <Label Text="Highlight"
+                 WidthRequest="100"
+                 FontSize="Small"/>
+          <BoxView WidthRequest="30"
+                   HeightRequest="30"
+                   BackgroundColor="{Binding Color, Converter={StaticResource ColorConverter}}"/>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal"
+                     BindingContext="{Binding LowlightColor}"
+                     Spacing="10">
+          <Label Text="Lowlight"
+                 WidthRequest="100"
+                 FontSize="Small"/>
+          <BoxView WidthRequest="30"
+                   HeightRequest="30"
+                   BackgroundColor="{Binding Color, Converter={StaticResource ColorConverter}}"/>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal"
+                     BindingContext="{Binding MutedColor}"
+                     Spacing="10">
+          <Label Text="Muted"
+                 WidthRequest="100"
+                 FontSize="Small"/>
+          <BoxView WidthRequest="30"
+                   HeightRequest="30"
+                   BackgroundColor="{Binding Color, Converter={StaticResource ColorConverter}}"/>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal"
+                     BindingContext="{Binding SecondaryTextColor}"
+                     Spacing="10">
+          <Label Text="SecondaryText"
+                 WidthRequest="100"
+                 FontSize="Small"/>
+          <BoxView WidthRequest="30"
+                   HeightRequest="30"
+                   BackgroundColor="{Binding Color, Converter={StaticResource ColorConverter}}"/>
+          <c:BindablePicker ItemsSource="{Binding ColorLabelSelection}"
+                            SelectedIndex="{Binding SelecedIndex, Mode=TwoWay}"/>
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal"
+                       Padding="10"
+                       Spacing="10"
+                       HorizontalOptions="End">
+          <Button Text="Pull"
+                  Command="{Binding PullCommand}"
+                  VerticalOptions="Center"
+                  FontSize="Medium"/>
+          <Button Text=" Apply"
+                  Command="{Binding ApplyCommand}"
+                  VerticalOptions="Center"
+                  FontSize="Medium"/>
+        </StackLayout>
+      </StackLayout>
+
     </ScrollView>
   </Grid>
 

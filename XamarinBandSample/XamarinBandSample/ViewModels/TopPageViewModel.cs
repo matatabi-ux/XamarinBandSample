@@ -66,6 +66,24 @@ namespace XamarinBandSample.ViewModels
 
         #endregion //ShowSensors
 
+        #region ShowPersonalize
+
+        /// <summary>
+        /// 着せ替え情報表示フラグ
+        /// </summary>
+        private bool showPersonalize = false;
+
+        /// <summary>
+        /// 着せ替え情報表示フラグ
+        /// </summary>
+        public bool ShowPersonalize
+        {
+            get { return this.showPersonalize; }
+            set { this.SetProperty(ref this.showPersonalize, value); }
+        }
+
+        #endregion //ShowPersonalize
+
         #region IsConnected
 
         /// <summary>
@@ -156,6 +174,15 @@ namespace XamarinBandSample.ViewModels
 
         #endregion //SelectSensorsCommand
 
+        #region SelectPersonalizeCommand
+
+        /// <summary>
+        /// 着せ替え情報表示選択コマンド
+        /// </summary>
+        public ICommand SelectPersonalizeCommand { get; private set; }
+
+        #endregion //SelectPersonalizeCommand
+
         #region ConnectCommand
 
         /// <summary>
@@ -201,6 +228,24 @@ namespace XamarinBandSample.ViewModels
 
         #endregion //SensorReading
 
+        #region PersonalizeViewModel
+
+        /// <summary>
+        /// 着せ替え情報
+        /// </summary>
+        private PersonalizeViewModel personalize = null;
+
+        /// <summary>
+        /// 着せ替え情報
+        /// </summary>
+        public PersonalizeViewModel Personalize
+        {
+            get { return this.personalize; }
+            set { this.SetProperty<PersonalizeViewModel>(ref this.personalize, value); }
+        }
+
+        #endregion //PersonalizeViewModel
+
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -211,9 +256,11 @@ namespace XamarinBandSample.ViewModels
             this.manager = manager;
             this.SelectBasicsCommand = new DelegateCommand(this.SelectBasics, () => { return !this.ShowBasics; });
             this.SelectSensorsCommand = DelegateCommand.FromAsyncHandler(this.SelectSensors, () => { return !this.ShowSensors; });
+            this.SelectPersonalizeCommand = DelegateCommand.FromAsyncHandler(this.SelectPersonalize, () => { return !this.ShowPersonalize; });
             this.ConnectCommand = DelegateCommand.FromAsyncHandler(this.Connect);
 
             App.Container.RegisterType<SensorReadingViewModel>(new ContainerControlledLifetimeManager());
+            App.Container.RegisterType<PersonalizeViewModel>(new ContainerControlledLifetimeManager());
         }
 
         /// <summary>
@@ -222,14 +269,17 @@ namespace XamarinBandSample.ViewModels
         private void SelectBasics()
         {
             this.ShowSensors = false;
+            this.ShowPersonalize = false;
             this.ShowBasics = true;
             ((DelegateCommand)this.SelectBasicsCommand).RaiseCanExecuteChanged();
             ((DelegateCommand)this.SelectSensorsCommand).RaiseCanExecuteChanged();
+            ((DelegateCommand)this.SelectPersonalizeCommand).RaiseCanExecuteChanged();
         }
 
         /// <summary>
         /// センサー情報表示切替
         /// </summary>
+        /// <returns>Task</returns>
         private async Task SelectSensors()
         {
             if (!this.IsConnected)
@@ -238,9 +288,30 @@ namespace XamarinBandSample.ViewModels
                 return;
             }
             this.ShowBasics = false;
+            this.ShowPersonalize = false;
             this.ShowSensors = true;
             ((DelegateCommand)this.SelectBasicsCommand).RaiseCanExecuteChanged();
             ((DelegateCommand)this.SelectSensorsCommand).RaiseCanExecuteChanged();
+            ((DelegateCommand)this.SelectPersonalizeCommand).RaiseCanExecuteChanged();
+        }
+
+        /// <summary>
+        /// 着せ替え情報表示切替
+        /// </summary>
+        /// <returns>Task</returns>
+        private async Task SelectPersonalize()
+        {
+            if (!this.IsConnected)
+            {
+                await App.Navigation.CurrentPage.DisplayAlert("Warning", "No Microsoft Band connected.", "OK");
+                return;
+            }
+            this.ShowBasics = false;
+            this.ShowSensors = false;
+            this.ShowPersonalize = true;
+            ((DelegateCommand)this.SelectBasicsCommand).RaiseCanExecuteChanged();
+            ((DelegateCommand)this.SelectSensorsCommand).RaiseCanExecuteChanged();
+            ((DelegateCommand)this.SelectPersonalizeCommand).RaiseCanExecuteChanged();
         }
 
         /// <summary>
@@ -274,6 +345,7 @@ namespace XamarinBandSample.ViewModels
             App.Container.RegisterInstance<IBandClient>(client, new ContainerControlledLifetimeManager());
             App.Container.RegisterInstance<IBandInfo>(device, new ContainerControlledLifetimeManager());
             this.SensorReading = App.Container.Resolve<SensorReadingViewModel>();
+            this.Personalize = App.Container.Resolve<PersonalizeViewModel>();
 
             this.ConnectMessage = string.Empty;
             this.BandName = device.Name;
