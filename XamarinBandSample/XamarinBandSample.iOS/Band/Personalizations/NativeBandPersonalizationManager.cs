@@ -166,6 +166,11 @@ namespace XamarinBandSample.iOS.Band.Personalizations
             var nativeTheme = new Native.Tiles.BandTheme
             {
                 BaseColor = ToNative(theme.Base),
+                HighContrastColor = ToNative(theme.HighContrast),
+                HighLightColor = ToNative(theme.Highlight),
+                LowLightColor = ToNative(theme.Lowlight),
+                MutedColor = ToNative(theme.Muted),
+                SecondaryTextColor = ToNative(theme.SecondaryText),
             };
             return Native.Personalization.BandPersonalizationManagerExtensions.UpdateThemeAsync(this.manager, nativeTheme);
         }

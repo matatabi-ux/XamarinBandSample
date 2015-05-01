@@ -44,11 +44,6 @@ namespace XamarinBandSample.ViewModels
         /// </summary>
         public ICommand ApplyCommand { get; private set; }
 
-        /// <summary>
-        /// 配色選択肢
-        /// </summary>
-        public List<string> ColorSelection { get; private set; }
-
         #region ThemeColors
 
         /// <summary>
@@ -259,6 +254,14 @@ namespace XamarinBandSample.ViewModels
             this.LowlightColor.Color = ColorToString(theme.Lowlight);
             this.MutedColor.Color = ColorToString(theme.Muted);
             this.SecondaryTextColor.Color = ColorToString(theme.SecondaryText);
+
+            Debug.WriteLine("{0} {1} {2} {3} {4} {5}",
+                this.BaseColor.Color,
+                this.HighContrastColor.Color,
+                this.HighlightColor.Color,
+                this.LowlightColor.Color,
+                this.MutedColor.Color,
+                this.SecondaryTextColor.Color);
         }
 
         /// <summary>
