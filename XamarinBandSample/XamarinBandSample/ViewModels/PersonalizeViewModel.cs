@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Band;
@@ -21,6 +22,7 @@ using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Practices.Unity;
 using Xamarin.Forms;
+using XamarinBandSample.Band.Personalizations;
 
 namespace XamarinBandSample.ViewModels
 {
@@ -35,6 +37,11 @@ namespace XamarinBandSample.ViewModels
         private IBandClient client = null;
 
         /// <summary>
+        /// 着せ替え管理クラス
+        /// </summary>
+        private IBandPersonalizationImageManager manager = null;
+
+        /// <summary>
         /// 設定状況更新コマンド
         /// </summary>
         public ICommand PullCommand { get; private set; }
@@ -43,6 +50,20 @@ namespace XamarinBandSample.ViewModels
         /// 設定適用コマンド
         /// </summary>
         public ICommand ApplyCommand { get; private set; }
+
+        /// <summary>
+        /// 処理中フラグ
+        /// </summary>
+        private bool isBusy = false;
+
+        /// <summary>
+        /// 処理中フラグ
+        /// </summary>
+        public bool IsBusy
+        {
+            get { return this.isBusy; }
+            set { this.SetProperty<bool>(ref this.isBusy, value); }
+        }
 
         #region ThemeColors
 
@@ -132,14 +153,34 @@ namespace XamarinBandSample.ViewModels
 
         #endregion //ThemeColors
 
+        #region MeTileImage
+
+        /// <summary>
+        /// 壁紙画像ソース
+        /// </summary>
+        private ImageSource meTileImageSource = ImageSource.FromResource(@"XamarinBandSample.Assets.me-tile.png");
+
+        /// <summary>
+        /// 壁紙画像ソース
+        /// </summary>
+        public ImageSource MeTileImageSource
+        {
+            get { return this.meTileImageSource; }
+            set { this.SetProperty<ImageSource>(ref this.meTileImageSource, value); }
+        }
+
+        #endregion //MeTileImage
+
         /// <summary>
         /// コンストラクタ
         /// </summary>
         /// <param name="client">接続クライアント</param>
         [InjectionConstructor]
-        public PersonalizeViewModel(IBandClient client)
+        public PersonalizeViewModel(IBandClient client, IBandPersonalizationImageManager manager)
         {
+            this.IsBusy = true;
             this.client = client;
+            this.manager = manager;
 
             this.PullCommand = DelegateCommand.FromAsyncHandler(this.Pull);
             this.ApplyCommand = DelegateCommand.FromAsyncHandler(this.Apply);
@@ -153,6 +194,7 @@ namespace XamarinBandSample.ViewModels
             this.SecondaryTextColor.SelecedIndex = 5;
 
             this.baseColor.PropertyChanged += this.OnBaseColorChanged;
+            this.IsBusy = false;
         }
 
         /// <summary>
@@ -246,22 +288,21 @@ namespace XamarinBandSample.ViewModels
         /// <returns>Task</returns>
         private async Task Pull()
         {
-            var theme = await this.client.PersonalizationManager.GetThemeAsync();
+            this.IsBusy = true;
+            var theme = await this.manager.GetThemeAsync();
 
             this.BaseColor.Color = ColorToString(theme.Base);
+            this.BaseColor.SelecedIndex = -1;
             this.HighContrastColor.Color = ColorToString(theme.HighContrast);
             this.HighlightColor.Color = ColorToString(theme.Highlight);
             this.LowlightColor.Color = ColorToString(theme.Lowlight);
             this.MutedColor.Color = ColorToString(theme.Muted);
             this.SecondaryTextColor.Color = ColorToString(theme.SecondaryText);
+            this.SecondaryTextColor.SelecedIndex = -1;
 
-            Debug.WriteLine("{0} {1} {2} {3} {4} {5}",
-                this.BaseColor.Color,
-                this.HighContrastColor.Color,
-                this.HighlightColor.Color,
-                this.LowlightColor.Color,
-                this.MutedColor.Color,
-                this.SecondaryTextColor.Color);
+            var source = await this.manager.GetMeTileImageSourceAsync();
+            this.MeTileImageSource = source;
+            this.IsBusy = false;
         }
 
         /// <summary>
@@ -300,6 +341,7 @@ namespace XamarinBandSample.ViewModels
         /// <returns>Task</returns>
         private async Task Apply()
         {
+            this.IsBusy = true;
             var theme = new BandTheme()
             {
                 Base = StringToColor(this.BaseColor.Color),
@@ -310,7 +352,15 @@ namespace XamarinBandSample.ViewModels
                 SecondaryText = StringToColor(this.SecondaryTextColor.Color),
             };
 
-            await this.client.PersonalizationManager.SetThemeAsync(theme);
+            await this.manager.SetThemeAsync(theme);
+
+            var source = this.meTileImageSource as StreamImageSource;
+            if (source != null)
+            {
+                await this.manager.SetMeTileImageSourceAsync(await source.Stream.Invoke(new CancellationToken()));
+            }
+
+            this.IsBusy = false;
         }
     }
 }

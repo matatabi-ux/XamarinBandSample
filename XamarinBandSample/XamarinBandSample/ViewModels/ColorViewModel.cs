@@ -65,7 +65,10 @@ namespace XamarinBandSample.ViewModels
             set
             {
                 this.SetProperty<int>(ref this.selecedIndex, value);
-                this.Color = this.ColorSelection[this.selecedIndex];
+                if (this.selecedIndex >= 0 && this.selecedIndex < this.ColorSelection.Count)
+                {
+                    this.Color = this.ColorSelection[this.selecedIndex];
+                }
             }
         }
 

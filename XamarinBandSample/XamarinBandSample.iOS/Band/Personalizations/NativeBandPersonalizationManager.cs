@@ -11,6 +11,7 @@ extern alias ios;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Channels;
 using System.Text;
@@ -18,19 +19,19 @@ using System.Threading;
 using System.Threading.Tasks;
 using Foundation;
 using global::Microsoft.Band;
-using Microsoft.Band.Personalization;
-using Microsoft.Band.Sensors;
-using Microsoft.Practices.Unity;
+using global::Microsoft.Band.Personalization;
 using Native = ios::Microsoft.Band;
 using UIKit;
+using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
+using XamarinBandSample.Band.Personalizations;
 
 namespace XamarinBandSample.iOS.Band.Personalizations
 {
     /// <summary>
     /// iOS 用着せ替え管理クラス
     /// </summary>
-    public class NativeBandPersonalizationManager : IBandPersonalizationManager
+    public class NativeBandPersonalizationManager : IBandPersonalizationImageManager
     {
         /// <summary>
         /// 着せ替え管理クラス
@@ -40,10 +41,47 @@ namespace XamarinBandSample.iOS.Band.Personalizations
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        /// <param name="client">iOS 用接続クライアント</param>
         public NativeBandPersonalizationManager(Native.BandClient client)
         {
             this.manager = client.PersonalizationManager;
+        }
+
+        /// <summary>
+        /// 接続クライアントを設定する
+        /// </summary>
+        /// <param name="client">接続クライアント</param>
+        public void SetClient(IBandClient client)
+        {
+            // Dummy
+        }
+
+        /// <summary>
+        /// 壁紙の取得
+        /// </summary>
+        /// <returns>壁紙画像のソース</returns>
+        public async Task<ImageSource> GetMeTileImageSourceAsync()
+        {
+            var image = await Native.Personalization.BandPersonalizationManagerExtensions.GetMeTileImageTaskAsync(this.manager);
+            return ImageSource.FromStream(image.UIImage.AsPNG().AsStream);
+        }
+
+        /// <summary>
+        /// 壁紙の設定
+        /// </summary>
+        /// <param name="stream">壁紙画像の入力ストリーム</param>
+        /// <returns>Task</returns>
+        public async Task SetMeTileImageSourceAsync(Stream stream)
+        {
+            var image = await Task.Run(() =>
+            {
+                using (var data = NSData.FromStream(stream))
+                {
+                    return UIImage.LoadFromData(data);
+                }
+            });
+            await Native.Personalization.BandPersonalizationManagerExtensions.UpdateMeTileImageAsync(
+                this.manager,
+                new ios::Microsoft.Band.Tiles.BandImage(image));
         }
 
         /// <summary>
@@ -51,7 +89,7 @@ namespace XamarinBandSample.iOS.Band.Personalizations
         /// </summary>
         /// <param name="cancel">中断トークン</param>
         /// <returns>壁紙画像</returns>
-        [Obsolete("CancellationToken is not supported for iOS.")]
+        [Obsolete("Not Implemented")]
         public Task<BandImage> GetMeTileImageAsync(CancellationToken cancel)
         {
             return this.GetMeTileImageAsync();
@@ -61,6 +99,7 @@ namespace XamarinBandSample.iOS.Band.Personalizations
         /// 壁紙の取得
         /// </summary>
         /// <returns>壁紙画像</returns>
+        [Obsolete("Not Implemented")]
         public Task<BandImage> GetMeTileImageAsync()
         {
             throw new NotImplementedException();
@@ -128,7 +167,7 @@ namespace XamarinBandSample.iOS.Band.Personalizations
         /// <param name="image">壁紙画像</param>
         /// <param name="cancel">中断トークン</param>
         /// <returns>Task</returns>
-        [Obsolete("CancellationToken is not supported for iOS.")]
+        [Obsolete("Not Implemented")]
         public Task SetMeTileImageAsync(BandImage image, CancellationToken cancel)
         {
             return this.SetMeTileImageAsync(image);
@@ -139,6 +178,7 @@ namespace XamarinBandSample.iOS.Band.Personalizations
         /// </summary>
         /// <param name="image">壁紙画像</param>
         /// <returns>Task</returns>
+        [Obsolete("Not Implemented")]
         public Task SetMeTileImageAsync(BandImage image)
         {
             throw new NotImplementedException();

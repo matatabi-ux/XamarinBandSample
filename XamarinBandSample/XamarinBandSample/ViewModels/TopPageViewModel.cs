@@ -14,9 +14,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Band;
+using Microsoft.Band.Personalization;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Practices.Unity;
+using XamarinBandSample.Band.Personalizations;
 
 namespace XamarinBandSample.ViewModels
 {
@@ -344,6 +346,7 @@ namespace XamarinBandSample.ViewModels
             // 別の場所から利用できるように DI コンテナに登録
             App.Container.RegisterInstance<IBandClient>(client, new ContainerControlledLifetimeManager());
             App.Container.RegisterInstance<IBandInfo>(device, new ContainerControlledLifetimeManager());
+            App.Container.Resolve<IBandPersonalizationImageManager>().SetClient(client);
             this.SensorReading = App.Container.Resolve<SensorReadingViewModel>();
             this.Personalize = App.Container.Resolve<PersonalizeViewModel>();
 

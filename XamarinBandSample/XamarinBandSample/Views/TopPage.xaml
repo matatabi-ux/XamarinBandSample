@@ -313,6 +313,7 @@
                    HeightRequest="30"
                    BackgroundColor="{Binding Color, Converter={StaticResource ColorConverter}}"/>
           <c:BindablePicker ItemsSource="{Binding ColorLabelSelection}"
+                            IsEnabled="{Binding IsBusy, Converter={StaticResource NegativeConverter}}"
                             SelectedIndex="{Binding SelecedIndex, Mode=TwoWay}"/>
         </StackLayout>
         <StackLayout Orientation="Horizontal"
@@ -365,18 +366,25 @@
                    HeightRequest="30"
                    BackgroundColor="{Binding Color, Converter={StaticResource ColorConverter}}"/>
           <c:BindablePicker ItemsSource="{Binding ColorLabelSelection}"
+                            IsEnabled="{Binding IsBusy, Converter={StaticResource NegativeConverter}}"
                             SelectedIndex="{Binding SelecedIndex, Mode=TwoWay}"/>
         </StackLayout>
 
+        <Label Text="Me Tile"
+               FontSize="Small"/>
+        <Image Source="{Binding MeTileImageSource}" WidthRequest="310"/>
+        
         <StackLayout Orientation="Horizontal"
                        Padding="10"
                        Spacing="10"
                        HorizontalOptions="End">
           <Button Text="Pull"
+                  IsEnabled="{Binding IsBusy, Converter={StaticResource NegativeConverter}}"
                   Command="{Binding PullCommand}"
                   VerticalOptions="Center"
                   FontSize="Medium"/>
           <Button Text=" Apply"
+                  IsEnabled="{Binding IsBusy, Converter={StaticResource NegativeConverter}}"
                   Command="{Binding ApplyCommand}"
                   VerticalOptions="Center"
                   FontSize="Medium"/>
