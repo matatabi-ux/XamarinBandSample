@@ -81,7 +81,7 @@ namespace XamarinBandSample.iOS.Band.Personalizations
             });
             await Native.Personalization.BandPersonalizationManagerExtensions.UpdateMeTileImageAsync(
                 this.manager,
-                new ios::Microsoft.Band.Tiles.BandImage(image));
+                new Native.Tiles.BandImage(image));
         }
 
         /// <summary>
