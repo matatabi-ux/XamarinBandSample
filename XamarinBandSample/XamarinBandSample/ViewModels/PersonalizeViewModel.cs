@@ -196,6 +196,54 @@ namespace XamarinBandSample.ViewModels
             this.baseColor.PropertyChanged += this.OnBaseColorChanged;
             this.IsBusy = false;
         }
+ 
+        /// <summary>
+        /// 設定状況取得
+        /// </summary>
+        /// <returns>Task</returns>
+        private async Task Pull()
+        {
+            this.IsBusy = true;
+            var theme = await this.manager.GetThemeAsync();
+
+            this.BaseColor.Color = ColorToString(theme.Base);
+            this.BaseColor.SelecedIndex = -1;
+            this.HighContrastColor.Color = ColorToString(theme.HighContrast);
+            this.HighlightColor.Color = ColorToString(theme.Highlight);
+            this.LowlightColor.Color = ColorToString(theme.Lowlight);
+            this.MutedColor.Color = ColorToString(theme.Muted);
+            this.SecondaryTextColor.Color = ColorToString(theme.SecondaryText);
+            this.SecondaryTextColor.SelecedIndex = -1;
+
+            var source = await this.manager.GetMeTileImageSourceAsync();
+            this.MeTileImageSource = source;
+            this.IsBusy = false;
+        }
+
+        /// <summary>
+        /// BandColor をカラーコード文字列に変換する
+        /// </summary>
+        /// <param name="color">BandColor</param>
+        /// <returns>カラーコード</returns>
+        private static string ColorToString(BandColor color)
+        {
+            return string.Format("#FF{0}{1}{2}", color.R.ToString("X2"), color.G.ToString("X2"), color.B.ToString("X2"));
+        }
+
+        /// <summary>
+        /// 配色文字列を BandColor に変換する
+        /// </summary>
+        /// <param name="colorString">配色文字列を</param>
+        /// <returns>BandColor</returns>
+        private static BandColor StringToColor(string colorString)
+        {
+            var color = (Color)ColorConverter.ConvertFrom(colorString);
+            color.ToString();
+            return new BandColor(
+                (byte)(color.R * 255d),
+                (byte)(color.G * 255d),
+                (byte)(color.B * 255d));
+        }
 
         /// <summary>
         /// 基本色変更イベントハンドラ
@@ -280,54 +328,6 @@ namespace XamarinBandSample.ViewModels
                     this.MutedColor.Color = "#FF669900";
                     break;
             }
-        }
-
-        /// <summary>
-        /// 設定状況取得
-        /// </summary>
-        /// <returns>Task</returns>
-        private async Task Pull()
-        {
-            this.IsBusy = true;
-            var theme = await this.manager.GetThemeAsync();
-
-            this.BaseColor.Color = ColorToString(theme.Base);
-            this.BaseColor.SelecedIndex = -1;
-            this.HighContrastColor.Color = ColorToString(theme.HighContrast);
-            this.HighlightColor.Color = ColorToString(theme.Highlight);
-            this.LowlightColor.Color = ColorToString(theme.Lowlight);
-            this.MutedColor.Color = ColorToString(theme.Muted);
-            this.SecondaryTextColor.Color = ColorToString(theme.SecondaryText);
-            this.SecondaryTextColor.SelecedIndex = -1;
-
-            var source = await this.manager.GetMeTileImageSourceAsync();
-            this.MeTileImageSource = source;
-            this.IsBusy = false;
-        }
-
-        /// <summary>
-        /// BandColor をカラーコード文字列に変換する
-        /// </summary>
-        /// <param name="color">BandColor</param>
-        /// <returns>カラーコード</returns>
-        private static string ColorToString(BandColor color)
-        {
-            return string.Format("#FF{0}{1}{2}", color.R.ToString("X2"), color.G.ToString("X2"), color.B.ToString("X2"));
-        }
-
-        /// <summary>
-        /// 配色文字列を BandColor に変換する
-        /// </summary>
-        /// <param name="colorString">配色文字列を</param>
-        /// <returns>BandColor</returns>
-        private static BandColor StringToColor(string colorString)
-        {
-            var color = (Color)ColorConverter.ConvertFrom(colorString);
-            color.ToString();
-            return new BandColor(
-                (byte)(color.R * 255d),
-                (byte)(color.G * 255d),
-                (byte)(color.B * 255d));
         }
 
         /// <summary>

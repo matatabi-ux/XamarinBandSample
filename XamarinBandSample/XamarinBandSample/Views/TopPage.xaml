@@ -393,7 +393,6 @@
                   FontSize="Medium"/>
         </StackLayout>
       </StackLayout>
-
     </ScrollView>
     
     <!-- Tiles Info Pain-->
