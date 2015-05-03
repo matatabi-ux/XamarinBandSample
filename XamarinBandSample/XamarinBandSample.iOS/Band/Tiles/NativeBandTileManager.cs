@@ -99,7 +99,7 @@ namespace XamarinBandSample.iOS.Band.Tiles
         /// <returns>écÇËÉAÉvÉäògêî</returns>
         public async Task<int> GetRemainingTileCapacityAsync()
         {
-            return (int)await Native.Tiles.BandTileManagerExtensions.RemainingTileCapacityTaskAsync(this.manager);
+            return (int)await Native.Tiles.BandTileManagerExtensions.GetRemainingTileCapacityTaskAsync(this.manager);
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace XamarinBandSample.iOS.Band.Tiles
         {
             await Native.Tiles.BandTileManagerExtensions.RemoveTileTaskAsync(
                 this.manager,
-                new NSUuid(tileId.ToByteArray()));
+                new NSUuid(tileId.ToString("D")));
             return true;
         }
 

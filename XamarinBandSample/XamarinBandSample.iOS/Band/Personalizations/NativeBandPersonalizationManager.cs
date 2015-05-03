@@ -73,7 +73,7 @@ namespace XamarinBandSample.iOS.Band.Personalizations
         /// <returns>Task</returns>
         public async Task SetMeTileImageSourceAsync(StreamImageSource source)
         {
-            await Native.Personalization.BandPersonalizationManagerExtensions.UpdateMeTileImageAsync(
+            await Native.Personalization.BandPersonalizationManagerExtensions.SetMeTileImageTaskAsync(
                this.manager,
                await NativeBandImageConvert.ToNative(source));
         }
@@ -162,7 +162,7 @@ namespace XamarinBandSample.iOS.Band.Personalizations
         /// <returns>Task</returns>
         public Task SetThemeAsync(BandTheme theme)
         {
-            return Native.Personalization.BandPersonalizationManagerExtensions.UpdateThemeAsync(
+            return Native.Personalization.BandPersonalizationManagerExtensions.SetThemeTaskAsync(
                 this.manager, NativeBandThemeConvert.ToNative(theme));
         }
     }

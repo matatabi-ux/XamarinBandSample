@@ -35,9 +35,9 @@ namespace XamarinBandSample.iOS.Band.Sensors
         public NativeBandGyroscopeReading(Native.Sensors.BandSensorGyroscopeData data)
         {
             this.Timestamp = DateTime.Now;
-            this.AngularVelocityX = data.X;
-            this.AngularVelocityY = data.Y;
-            this.AngularVelocityZ = data.Z;
+            this.AngularVelocityX = data.AngularVelocityX;
+            this.AngularVelocityY = data.AngularVelocityY;
+            this.AngularVelocityZ = data.AngularVelocityZ;
         }
 
         /// <summary>

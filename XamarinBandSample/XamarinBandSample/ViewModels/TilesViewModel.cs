@@ -17,6 +17,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Band;
+using Microsoft.Band.Notifications;
 using Microsoft.Band.Personalization;
 using Microsoft.Band.Sensors;
 using Microsoft.Practices.Prism.Commands;
@@ -46,7 +47,7 @@ namespace XamarinBandSample.ViewModels
         /// <summary>
         /// アプリタイルID
         /// </summary>
-        private static readonly Guid TileId = new Guid("e26c7ebb-5f51-4194-8140-1af8c001a8d7");
+        private static readonly Guid TileId = Guid.Parse("e26c7ebb-5f51-4194-8140-1af8c001a8d7");
 
         /// <summary>
         /// アプリタイル取得コマンド
@@ -59,6 +60,21 @@ namespace XamarinBandSample.ViewModels
         public ICommand ToggleCommand { get; private set; }
 
         /// <summary>
+        /// メッセージ送信コマンド
+        /// </summary>
+        public ICommand SendMessageCommand { get; private set; }
+
+        /// <summary>
+        /// ダイアログ表示コマンド
+        /// </summary>
+        public ICommand ShowDialogCommand { get; private set; }
+
+        /// <summary>
+        /// 振動コマンド
+        /// </summary>
+        public ICommand VibrationCommand { get; private set; }
+
+        /// <summary>
         /// 処理中フラグ
         /// </summary>
         private bool isBusy = false;
@@ -69,7 +85,11 @@ namespace XamarinBandSample.ViewModels
         public bool IsBusy
         {
             get { return this.isBusy; }
-            set { this.SetProperty<bool>(ref this.isBusy, value); }
+            set
+            {
+                this.SetProperty<bool>(ref this.isBusy, value);
+                this.OnPropertyChanged("IsEnableTileManage");
+            }
         }
 
         /// <summary>
@@ -83,29 +103,48 @@ namespace XamarinBandSample.ViewModels
         public bool ExistsTile
         {
             get { return this.existsTile; }
-            set { this.SetProperty<bool>(ref this.existsTile, value); }
+            set
+            {
+                this.SetProperty<bool>(ref this.existsTile, value);
+                this.OnPropertyChanged("IsEnableTileManage");
+            }
         }
 
+        /// <summary>
+        /// タイル変更可能フラグ
+        /// </summary>
+        public bool IsEnableTileManage
+        {
+            get { return !this.IsBusy && this.ExistsTile; }
+        }
+
+        /// <summary>
+        /// タイルアイコン画像ソース
+        /// </summary>
         private ImageSource icon = null;
 
+        /// <summary>
+        /// タイルアイコン画像ソース
+        /// </summary>
         public ImageSource Icon
         {
             get { return this.icon; }
             set { this.SetProperty<ImageSource>(ref this.icon, value); }
         }
 
+        /// <summary>
+        /// タイル名称
+        /// </summary>
         private string tileName = string.Empty;
 
+        /// <summary>
+        /// タイル名称
+        /// </summary>
         public string TileName
         {
             get { return this.tileName; }
             set { this.SetProperty<string>(ref this.tileName, value); }
         }
-
-        /// <summary>
-        /// アプリタイル情報
-        /// </summary>
-        public ObservableCollection<IBandTile> Tiles { get; set; }
 
         /// <summary>
         /// 基本色
@@ -134,6 +173,9 @@ namespace XamarinBandSample.ViewModels
 
             this.PullCommand = DelegateCommand.FromAsyncHandler(this.Pull);
             this.ToggleCommand = DelegateCommand.FromAsyncHandler(this.Toggle);
+            this.SendMessageCommand = DelegateCommand.FromAsyncHandler(this.SendMessage);
+            this.ShowDialogCommand = DelegateCommand.FromAsyncHandler(this.ShowDialog);
+            this.VibrationCommand = DelegateCommand.FromAsyncHandler(this.Vibration);
 
             this.IsBusy = false;
         }
@@ -177,7 +219,7 @@ namespace XamarinBandSample.ViewModels
 
             try
             {
-                var tile = (await this.manager.GetTilesAsync()).FirstOrDefault(t => TileId.ToString().Equals(t.TileId.ToString()));
+                var tile = (await this.manager.GetTilesAsync()).FirstOrDefault(t => TileId.Equals(t.TileId));
                 if (tile != null)
                 {
                     await this.manager.RemoveTileAsync(TileId);
@@ -226,6 +268,53 @@ namespace XamarinBandSample.ViewModels
             {
                 await App.Navigation.CurrentPage.DisplayAlert("Error", exception.Message, "OK");
             }
+
+            this.IsBusy = false;
+        }
+
+        /// <summary>
+        /// メッセージ送信
+        /// </summary>
+        /// <returns>Task</returns>
+        private async Task SendMessage()
+        {
+            this.IsBusy = true;
+
+            await this.client.NotificationManager.SendMessageAsync(
+                TileId, 
+                "matatabi", 
+                "No cat no life",
+                new DateTimeOffset(DateTime.Now),
+                MessageFlags.None);
+
+            this.IsBusy = false;
+        }
+
+        /// <summary>
+        /// ダイアログ表示
+        /// </summary>
+        /// <returns>Task</returns>
+        private async Task ShowDialog()
+        {
+            this.IsBusy = true;
+
+            await this.client.NotificationManager.ShowDialogAsync(
+                TileId, 
+                "matatabi", 
+                "No cat no life");
+
+            this.IsBusy = false;
+        }
+
+        /// <summary>
+        /// 振動
+        /// </summary>
+        /// <returns>Task</returns>
+        private async Task Vibration()
+        {
+            this.IsBusy = true;
+
+            await this.client.NotificationManager.VibrateAsync(VibrationType.NotificationAlarm);
 
             this.IsBusy = false;
         }

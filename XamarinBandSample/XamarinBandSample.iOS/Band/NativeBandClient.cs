@@ -23,6 +23,7 @@ using global::Microsoft.Band.Tiles;
 using Microsoft.Practices.Unity;
 using XamarinBandSample.Band.Personalizations;
 using XamarinBandSample.Band.Tiles;
+using XamarinBandSample.iOS.Band.Notifications;
 using XamarinBandSample.iOS.Band.Personalizations;
 using XamarinBandSample.iOS.Band.Sensors;
 using XamarinBandSample.iOS.Band.Tiles;
@@ -51,6 +52,7 @@ namespace XamarinBandSample.iOS.Band
             App.Container.RegisterInstance<IBandSensorManager>(new NativeBandSensorManager(this.client), new ContainerControlledLifetimeManager());
             App.Container.RegisterInstance<IBandPersonalizationImageManager>(new NativeBandPersonalizationManager(this.client), new ContainerControlledLifetimeManager());
             App.Container.RegisterInstance<IBandTileImageManager>(new NativeBandTileManager(this.client), new ContainerControlledLifetimeManager());
+            App.Container.RegisterInstance<IBandNotificationManager>(new NativeBandNotificationManager(this.client), new ContainerControlledLifetimeManager());
         }
 
         /// <summary>

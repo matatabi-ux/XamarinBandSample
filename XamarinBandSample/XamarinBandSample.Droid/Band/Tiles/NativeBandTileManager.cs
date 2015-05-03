@@ -122,7 +122,7 @@ namespace XamarinBandSample.Droid.Band.Tiles
         {
             return Native.Tiles.BandTileManagerExtensions.RemoveTileTaskAsync(
                 this.manager,
-                UUID.NameUUIDFromBytes(tileId.ToByteArray()));
+                UUID.FromString(tileId.ToString("D")));
         }
 
         /// <summary>

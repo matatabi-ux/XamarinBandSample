@@ -36,7 +36,7 @@ namespace XamarinBandSample.iOS.Band
         /// </summary>
         /// <param name="image">画像情報</param>
         /// <returns>画像ソース</returns>
-        public static StreamImageSource FromNative(Native.Tiles.BandImage image)
+        public static StreamImageSource FromNative(Native.Personalization.BandImage image)
         {
             return (StreamImageSource)ImageSource.FromStream(image.UIImage.AsPNG().AsStream);
         }
@@ -46,7 +46,7 @@ namespace XamarinBandSample.iOS.Band
         /// </summary>
         /// <param name="source">画像ソース</param>
         /// <returns>画像情報</returns>
-        public static async Task<Native.Tiles.BandImage> ToNative(StreamImageSource source)
+        public static async Task<Native.Personalization.BandImage> ToNative(StreamImageSource source)
         {
             var stream = await source.Stream.Invoke(new CancellationToken());
             var image = await Task.Run(() =>
@@ -56,7 +56,7 @@ namespace XamarinBandSample.iOS.Band
                     return UIImage.LoadFromData(data);
                 }
             });
-            return new Native.Tiles.BandImage(image);
+            return new Native.Personalization.BandImage(image);
         }
 
         /// <summary>

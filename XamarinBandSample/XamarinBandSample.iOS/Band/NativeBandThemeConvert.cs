@@ -35,7 +35,7 @@ namespace XamarinBandSample.Band
         /// </summary>
         /// <param name="color">ネイティブ配色情報</param>
         /// <returns>共通配色情報</returns>
-        public static BandColor FromNative(Native.Tiles.BandColor color)
+        public static BandColor FromNative(Native.Personalization.BandColor color)
         {
             nfloat red, green, blue, alpha;
             color.UIColor.GetRGBA(out red, out green, out blue, out alpha);
@@ -52,9 +52,9 @@ namespace XamarinBandSample.Band
         /// </summary>
         /// <param name="color">共通配色情報</param>
         /// <returns>ネイティブ配色情報</returns>
-        public static Native.Tiles.BandColor ToNative(BandColor color)
+        public static Native.Personalization.BandColor ToNative(BandColor color)
         {
-            return Native.Tiles.BandColor.ColorWithRed(color.R, color.G, color.B);
+            return Native.Personalization.BandColor.FromRgb(color.R, color.G, color.B);
         }
         
         /// <summary>
@@ -62,16 +62,16 @@ namespace XamarinBandSample.Band
         /// </summary>
         /// <param name="nativeColor">ネイティブテーマカラー情報</param>
         /// <returns>共通テーマカラー情報</returns>
-        public static BandTheme FromNative(Native.Tiles.BandTheme theme)
+        public static BandTheme FromNative(Native.Personalization.BandTheme theme)
         {
             return new BandTheme
             {
-                Base = FromNative(theme.BaseColor),
-                HighContrast = FromNative(theme.HighContrastColor),
-                Highlight = FromNative(theme.HighLightColor),
-                Lowlight = FromNative(theme.LowLightColor),
-                Muted = FromNative(theme.MutedColor),
-                SecondaryText = FromNative(theme.SecondaryTextColor),
+                Base = FromNative(theme.Base),
+                HighContrast = FromNative(theme.HighContrast),
+                Highlight = FromNative(theme.Highlight),
+                Lowlight = FromNative(theme.Lowlight),
+                Muted = FromNative(theme.Muted),
+                SecondaryText = FromNative(theme.SecondaryText),
             };
         }
 
@@ -80,15 +80,16 @@ namespace XamarinBandSample.Band
         /// </summary>
         /// <param name="color">共通テーマカラー情報</param>
         /// <returns>ネイティブテーマカラー情報</returns>
-        public static Native.Tiles.BandTheme ToNative(BandTheme theme)
+        public static Native.Personalization.BandTheme ToNative(BandTheme theme)
         {
-            return new Native.Tiles.BandTheme{
-                BaseColor = ToNative(theme.Base),
-                HighContrastColor = ToNative(theme.HighContrast),
-                HighLightColor = ToNative(theme.Highlight),
-                LowLightColor = ToNative(theme.Lowlight),
-                MutedColor = ToNative(theme.Muted),
-                SecondaryTextColor = ToNative(theme.SecondaryText),
+            return new Native.Personalization.BandTheme
+            {
+                Base = ToNative(theme.Base),
+                HighContrast = ToNative(theme.HighContrast),
+                Highlight = ToNative(theme.Highlight),
+                Lowlight = ToNative(theme.Lowlight),
+                Muted = ToNative(theme.Muted),
+                SecondaryText = ToNative(theme.SecondaryText),
             };
         }
     }

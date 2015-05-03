@@ -93,6 +93,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Band\NativeBandThemeConvert.cs" />
+    <Compile Include="Band\Notifications\NativeBandNotificationManager.cs" />
     <Compile Include="Band\Personalizations\NativeBandPersonalizationManager.cs" />
     <Compile Include="Band\Sensors\NativeBandAcceleromerter.cs" />
     <Compile Include="Band\NativeBandInfo.cs" />

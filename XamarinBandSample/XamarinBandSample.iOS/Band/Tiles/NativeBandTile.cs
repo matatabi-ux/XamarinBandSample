@@ -50,7 +50,7 @@ namespace XamarinBandSample.iOS.Band.Tiles
             this.smallIconSource = NativeBandImageConvert.FromNative(smallIcon);
 
             var error = new NSError();
-            this.tile = Native.Tiles.BandTile.Create(new NSUuid(id.ToByteArray()), name, icon, smallIcon, out error);
+            this.tile = Native.Tiles.BandTile.Create(new NSUuid(id.ToString("D")), name, icon, smallIcon, out error);
         }
 
         /// <summary>
@@ -61,7 +61,8 @@ namespace XamarinBandSample.iOS.Band.Tiles
         {
             this.tile = tile;
 
-            this.tileId = new Guid(tile.TileId.GetBytes());
+            this.tileId = Guid.Parse(tile.TileId.AsString());
+
             this.tileIconSource = NativeBandImageConvert.FromNative(tile.TileIcon);
 
             // Band からタイル情報を取得した場合小さいアイコンがなぜか取れない

@@ -405,6 +405,7 @@
             VerticalOptions="StartAndExpand">
         <Grid.RowDefinitions>
           <RowDefinition Height="102"/>
+          <RowDefinition Height="Auto"/>
           <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -439,10 +440,31 @@
                HorizontalOptions="Center"
                VerticalOptions="Center"
                FontSize="Medium"/>
-        
+
         <StackLayout Grid.Row="1"
+                     Orientation="Vertical"
+                     Spacing="5"
+                     VerticalOptions="CenterAndExpand"
+                     HorizontalOptions="CenterAndExpand">
+          <Button Text="Send Message"
+                  IsEnabled="{Binding IsEnableTileManage}"
+                  Command="{Binding SendMessageCommand}"
+                  VerticalOptions="Center"
+                  FontSize="Medium"/>
+          <Button Text="Show Dialog"
+                  IsEnabled="{Binding IsEnableTileManage}"
+                  Command="{Binding ShowDialogCommand}"
+                  VerticalOptions="Center"
+                  FontSize="Medium"/>
+          <Button Text="Vibration"
+                  IsEnabled="{Binding IsEnableTileManage}"
+                  Command="{Binding VibrationCommand}"
+                  VerticalOptions="Center"
+                  FontSize="Medium"/>
+        </StackLayout>
+
+        <StackLayout Grid.Row="2"
                      Orientation="Horizontal"
-                     Padding="10"
                      Spacing="10"
                      HorizontalOptions="End">
           <Button Text="Pull"
@@ -458,7 +480,7 @@
                   FontSize="Medium"/>
           <Button Text="Remove Tile"
                   IsVisible="{Binding ExistsTile}"
-                  IsEnabled="{Binding IsBusy, Converter={StaticResource NegativeConverter}}"
+                  IsEnabled="{Binding IsEnableTileManage}"
                   Command="{Binding ToggleCommand}"
                   VerticalOptions="Center"
                   FontSize="Medium"/>

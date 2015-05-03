@@ -35,9 +35,9 @@ namespace XamarinBandSample.iOS.Band.Sensors
         public NativeBandAccelerometerReading(Native.Sensors.BandSensorAccelerometerData data)
         {
             this.Timestamp = DateTime.Now;
-            this.AccelerationX = data.X;
-            this.AccelerationY = data.Y;
-            this.AccelerationZ = data.Z;
+            this.AccelerationX = data.AccelerationX;
+            this.AccelerationY = data.AccelerationY;
+            this.AccelerationZ = data.AccelerationZ;
         }
 
         /// <summary>

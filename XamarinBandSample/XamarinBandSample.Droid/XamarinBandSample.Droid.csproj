@@ -104,6 +104,7 @@
     <Compile Include="Band\NativeBandThemeConvert.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Band\Notifications\NativeBandNotificationManager.cs" />
     <Compile Include="Band\Personalizations\NativeBandPersonalizationManager.cs">
       <SubType>Code</SubType>
     </Compile>

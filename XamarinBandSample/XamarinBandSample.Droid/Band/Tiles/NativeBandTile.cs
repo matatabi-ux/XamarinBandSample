@@ -41,7 +41,7 @@ namespace XamarinBandSample.Droid.Band.Tiles
         {
             this.tileId = id;
 
-            this.Build(UUID.NameUUIDFromBytes(id.ToByteArray()), name, icon, smallIcon);
+            this.Build(UUID.FromString(id.ToString("D")), name, icon, smallIcon);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace XamarinBandSample.Droid.Band.Tiles
         {
             this.tile = tile;
 
-            this.tileId = new Guid(tile.TileId.ToString());
+            this.tileId = Guid.Parse(tile.TileId.ToString());
             this.tileIconSource = NativeBandImageConvert.FromNative(tile.TileIcon);
 
             if (tile.TileSmallIcon != null)
