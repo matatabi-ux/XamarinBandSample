@@ -42,7 +42,7 @@ namespace XamarinBandSample.ViewModels
         private IBandPersonalizationImageManager manager = null;
 
         /// <summary>
-        /// 設定状況更新コマンド
+        /// 設定状況取得コマンド
         /// </summary>
         public ICommand PullCommand { get; private set; }
 
@@ -357,7 +357,7 @@ namespace XamarinBandSample.ViewModels
             var source = this.meTileImageSource as StreamImageSource;
             if (source != null)
             {
-                await this.manager.SetMeTileImageSourceAsync(await source.Stream.Invoke(new CancellationToken()));
+                await this.manager.SetMeTileImageSourceAsync(source);
             }
 
             this.IsBusy = false;

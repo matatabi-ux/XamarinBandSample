@@ -19,7 +19,9 @@ using Microsoft.Band;
 using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Practices.Unity;
 using XamarinBandSample.Band.Personalizations;
+using XamarinBandSample.Band.Tiles;
 using XamarinBandSample.Phone.Band.Personalizations;
+using XamarinBandSample.Phone.Band.Tiles;
 using XamarinBandSample.ViewModels;
 using XamarinBandSample.Views;
 
@@ -46,6 +48,7 @@ namespace XamarinBandSample.Phone
             // Microsoft Band デバイス管理クラスを DI コンテナに登録
             XamarinBandSample.App.Container.RegisterInstance<IBandClientManager>(BandClientManager.Instance, new ContainerControlledLifetimeManager());
             XamarinBandSample.App.Container.RegisterInstance<IBandPersonalizationImageManager>(new NativeBandPersonalizationManager(), new ContainerControlledLifetimeManager());
+            XamarinBandSample.App.Container.RegisterInstance<IBandTileImageManager>(new NativeBandTileManager(), new ContainerControlledLifetimeManager());
         }
 
         /// <summary>

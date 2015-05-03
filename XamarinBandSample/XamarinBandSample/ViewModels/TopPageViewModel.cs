@@ -19,6 +19,7 @@ using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using Microsoft.Practices.Unity;
 using XamarinBandSample.Band.Personalizations;
+using XamarinBandSample.Band.Tiles;
 
 namespace XamarinBandSample.ViewModels
 {
@@ -85,6 +86,24 @@ namespace XamarinBandSample.ViewModels
         }
 
         #endregion //ShowPersonalize
+
+        #region ShowTiles
+
+        /// <summary>
+        /// アプリタイル情報表示フラグ
+        /// </summary>
+        private bool showTiles = false;
+
+        /// <summary>
+        /// アプリタイル情報表示フラグ
+        /// </summary>
+        public bool ShowTiles
+        {
+            get { return this.showTiles; }
+            set { this.SetProperty(ref this.showTiles, value); }
+        }
+
+        #endregion //ShowTiles
 
         #region IsConnected
 
@@ -185,6 +204,15 @@ namespace XamarinBandSample.ViewModels
 
         #endregion //SelectPersonalizeCommand
 
+        #region SelectTilesCommand
+
+        /// <summary>
+        /// アプリタイル情報表示選択コマンド
+        /// </summary>
+        public ICommand SelectTilesCommand { get; private set; }
+
+        #endregion //SelectTilesCommand
+
         #region ConnectCommand
 
         /// <summary>
@@ -248,6 +276,24 @@ namespace XamarinBandSample.ViewModels
 
         #endregion //PersonalizeViewModel
 
+        #region TilesViewModel
+
+        /// <summary>
+        /// アプリタイル情報
+        /// </summary>
+        private TilesViewModel tiles = null;
+
+        /// <summary>
+        /// 着アプリタイル情報
+        /// </summary>
+        public TilesViewModel Tiles
+        {
+            get { return this.tiles; }
+            set { this.SetProperty<TilesViewModel>(ref this.tiles, value); }
+        }
+
+        #endregion //TilesViewModel
+
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -259,10 +305,12 @@ namespace XamarinBandSample.ViewModels
             this.SelectBasicsCommand = new DelegateCommand(this.SelectBasics, () => { return !this.ShowBasics; });
             this.SelectSensorsCommand = DelegateCommand.FromAsyncHandler(this.SelectSensors, () => { return !this.ShowSensors; });
             this.SelectPersonalizeCommand = DelegateCommand.FromAsyncHandler(this.SelectPersonalize, () => { return !this.ShowPersonalize; });
+            this.SelectTilesCommand = DelegateCommand.FromAsyncHandler(this.SelectTiles, () => { return !this.ShowTiles; });
             this.ConnectCommand = DelegateCommand.FromAsyncHandler(this.Connect);
 
             App.Container.RegisterType<SensorReadingViewModel>(new ContainerControlledLifetimeManager());
             App.Container.RegisterType<PersonalizeViewModel>(new ContainerControlledLifetimeManager());
+            App.Container.RegisterType<TilesViewModel>(new ContainerControlledLifetimeManager());
         }
 
         /// <summary>
@@ -272,10 +320,12 @@ namespace XamarinBandSample.ViewModels
         {
             this.ShowSensors = false;
             this.ShowPersonalize = false;
+            this.ShowTiles = false;
             this.ShowBasics = true;
             ((DelegateCommand)this.SelectBasicsCommand).RaiseCanExecuteChanged();
             ((DelegateCommand)this.SelectSensorsCommand).RaiseCanExecuteChanged();
             ((DelegateCommand)this.SelectPersonalizeCommand).RaiseCanExecuteChanged();
+            ((DelegateCommand)this.SelectTilesCommand).RaiseCanExecuteChanged();
         }
 
         /// <summary>
@@ -291,10 +341,12 @@ namespace XamarinBandSample.ViewModels
             }
             this.ShowBasics = false;
             this.ShowPersonalize = false;
+            this.ShowTiles = false;
             this.ShowSensors = true;
             ((DelegateCommand)this.SelectBasicsCommand).RaiseCanExecuteChanged();
             ((DelegateCommand)this.SelectSensorsCommand).RaiseCanExecuteChanged();
             ((DelegateCommand)this.SelectPersonalizeCommand).RaiseCanExecuteChanged();
+            ((DelegateCommand)this.SelectTilesCommand).RaiseCanExecuteChanged();
         }
 
         /// <summary>
@@ -310,10 +362,35 @@ namespace XamarinBandSample.ViewModels
             }
             this.ShowBasics = false;
             this.ShowSensors = false;
+            this.ShowTiles = false;
             this.ShowPersonalize = true;
             ((DelegateCommand)this.SelectBasicsCommand).RaiseCanExecuteChanged();
             ((DelegateCommand)this.SelectSensorsCommand).RaiseCanExecuteChanged();
             ((DelegateCommand)this.SelectPersonalizeCommand).RaiseCanExecuteChanged();
+            ((DelegateCommand)this.SelectTilesCommand).RaiseCanExecuteChanged();
+        }
+
+        /// <summary>
+        /// アプリタイル情報表示切替
+        /// </summary>
+        /// <returns>Task</returns>
+        private async Task SelectTiles()
+        {
+            if (!this.IsConnected)
+            {
+                await App.Navigation.CurrentPage.DisplayAlert("Warning", "No Microsoft Band connected.", "OK");
+                return;
+            }
+            this.ShowBasics = false;
+            this.ShowSensors = false;
+            this.ShowPersonalize = false;
+            this.ShowTiles = true;
+            ((DelegateCommand)this.SelectBasicsCommand).RaiseCanExecuteChanged();
+            ((DelegateCommand)this.SelectSensorsCommand).RaiseCanExecuteChanged();
+            ((DelegateCommand)this.SelectPersonalizeCommand).RaiseCanExecuteChanged();
+            ((DelegateCommand)this.SelectTilesCommand).RaiseCanExecuteChanged();
+
+            await this.Tiles.Pull();
         }
 
         /// <summary>
@@ -347,8 +424,10 @@ namespace XamarinBandSample.ViewModels
             App.Container.RegisterInstance<IBandClient>(client, new ContainerControlledLifetimeManager());
             App.Container.RegisterInstance<IBandInfo>(device, new ContainerControlledLifetimeManager());
             App.Container.Resolve<IBandPersonalizationImageManager>().SetClient(client);
+            App.Container.Resolve<IBandTileImageManager>().SetClient(client);
             this.SensorReading = App.Container.Resolve<SensorReadingViewModel>();
             this.Personalize = App.Container.Resolve<PersonalizeViewModel>();
+            this.Tiles = App.Container.Resolve<TilesViewModel>();
 
             this.ConnectMessage = string.Empty;
             this.BandName = device.Name;

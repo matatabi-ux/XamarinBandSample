@@ -6,31 +6,27 @@
 //-----------------------------------------------------------------------
 #endregion
 
-extern alias ios;
+extern alias android;
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Foundation;
+using Android.Graphics;
 using global::Microsoft.Band;
 using global::Microsoft.Band.Personalization;
-using Native = ios::Microsoft.Band;
-using UIKit;
+using Native = android::Microsoft.Band;
 using Xamarin.Forms;
-using Xamarin.Forms.Platform.iOS;
-using XamarinBandSample.Band;
 using XamarinBandSample.Band.Personalizations;
+using Color = Android.Graphics.Color;
 
-namespace XamarinBandSample.iOS.Band.Personalizations
+namespace XamarinBandSample.Droid.Band.Personalizations
 {
     /// <summary>
-    /// iOS 用着せ替え管理クラス
+    /// Android 用着せ替え管理クラス
     /// </summary>
     public class NativeBandPersonalizationManager : IBandPersonalizationImageManager
     {
@@ -42,7 +38,7 @@ namespace XamarinBandSample.iOS.Band.Personalizations
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public NativeBandPersonalizationManager(Native.BandClient client)
+        public NativeBandPersonalizationManager(Native.IBandClient client)
         {
             this.manager = client.PersonalizationManager;
         }
@@ -73,7 +69,7 @@ namespace XamarinBandSample.iOS.Band.Personalizations
         /// <returns>Task</returns>
         public async Task SetMeTileImageSourceAsync(StreamImageSource source)
         {
-            await Native.Personalization.BandPersonalizationManagerExtensions.UpdateMeTileImageAsync(
+            await Native.Personalization.BandPersonalizationManagerExtensions.SetMeTileImageTaskAsync(
                this.manager,
                await NativeBandImageConvert.ToNative(source));
         }
@@ -83,7 +79,7 @@ namespace XamarinBandSample.iOS.Band.Personalizations
         /// </summary>
         /// <param name="cancel">中断トークン</param>
         /// <returns>壁紙画像</returns>
-        [Obsolete("Not Implemented")]
+        [Obsolete("CancellationToken is not supported for Android.")]
         public Task<BandImage> GetMeTileImageAsync(CancellationToken cancel)
         {
             return this.GetMeTileImageAsync();
@@ -93,7 +89,6 @@ namespace XamarinBandSample.iOS.Band.Personalizations
         /// 壁紙の取得
         /// </summary>
         /// <returns>壁紙画像</returns>
-        [Obsolete("Not Implemented")]
         public Task<BandImage> GetMeTileImageAsync()
         {
             throw new NotImplementedException();
@@ -104,7 +99,7 @@ namespace XamarinBandSample.iOS.Band.Personalizations
         /// </summary>
         /// <param name="cancel">中断トークン</param>
         /// <returns>テーマ情報</returns>
-        [Obsolete("CancellationToken is not supported for iOS.")]
+        [Obsolete("CancellationToken is not supported for Android.")]
         public Task<BandTheme> GetThemeAsync(CancellationToken cancel)
         {
             return this.GetThemeAsync();
@@ -126,7 +121,7 @@ namespace XamarinBandSample.iOS.Band.Personalizations
         /// <param name="image">壁紙画像</param>
         /// <param name="cancel">中断トークン</param>
         /// <returns>Task</returns>
-        [Obsolete("Not Implemented")]
+        [Obsolete("CancellationToken is not supported for Android.")]
         public Task SetMeTileImageAsync(BandImage image, CancellationToken cancel)
         {
             return this.SetMeTileImageAsync(image);
@@ -137,7 +132,6 @@ namespace XamarinBandSample.iOS.Band.Personalizations
         /// </summary>
         /// <param name="image">壁紙画像</param>
         /// <returns>Task</returns>
-        [Obsolete("Not Implemented")]
         public Task SetMeTileImageAsync(BandImage image)
         {
             throw new NotImplementedException();
@@ -149,7 +143,7 @@ namespace XamarinBandSample.iOS.Band.Personalizations
         /// <param name="theme">テーマ情報</param>
         /// <param name="cancel">中断トークン</param>
         /// <returns>Task</returns>
-        [Obsolete("CancellationToken is not supported for iOS.")]
+        [Obsolete("CancellationToken is not supported for Android.")]
         public Task SetThemeAsync(BandTheme theme, CancellationToken cancel)
         {
             return this.SetThemeAsync(theme);
@@ -162,7 +156,7 @@ namespace XamarinBandSample.iOS.Band.Personalizations
         /// <returns>Task</returns>
         public Task SetThemeAsync(BandTheme theme)
         {
-            return Native.Personalization.BandPersonalizationManagerExtensions.UpdateThemeAsync(
+            return Native.Personalization.BandPersonalizationManagerExtensions.SetThemeTaskAsync(
                 this.manager, NativeBandThemeConvert.ToNative(theme));
         }
     }

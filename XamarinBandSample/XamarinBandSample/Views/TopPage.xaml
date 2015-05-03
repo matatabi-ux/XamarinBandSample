@@ -27,6 +27,9 @@
     <ToolbarItem Text="Personalize"
                  Command="{Binding SelectPersonalizeCommand}">
     </ToolbarItem>
+    <ToolbarItem Text="Tiles"
+                 Command="{Binding SelectTilesCommand}">
+    </ToolbarItem>
   </ContentPage.ToolbarItems>
 
   <Grid>
@@ -392,6 +395,78 @@
       </StackLayout>
 
     </ScrollView>
+    
+    <!-- Tiles Info Pain-->
+    <ScrollView IsVisible="{Binding ShowTiles}"
+                Orientation="Vertical">
+      <Grid BindingContext="{Binding Tiles}"
+            Padding="10"
+            RowSpacing="10"
+            VerticalOptions="StartAndExpand">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="102"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0"
+              ColumnSpacing="10"
+              IsVisible="{Binding ExistsTile}">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="102"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <BoxView Grid.Column="0"
+                   WidthRequest="102"
+                   HeightRequest="102"
+                   BackgroundColor="{Binding BaseColor.Color, Converter={StaticResource ColorConverter}}"/>
+          <Image Grid.Column="0"
+                 Source="{Binding Icon}"
+                 HorizontalOptions="Center"
+                 VerticalOptions="Center"
+                 WidthRequest="46"
+                 HeightRequest="46"/>
+          <Label Grid.Column="1"
+                 Text="{Binding TileName}"
+                 HorizontalOptions="StartAndExpand"
+                 VerticalOptions="CenterAndExpand"
+                 FontSize="Medium"/>
+        </Grid>
+
+        <Label Grid.Row="0"
+               IsVisible="{Binding ExistsTile, Converter={StaticResource NegativeConverter}}"
+               Text="No tiles registered"
+               HeightRequest="102"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"
+               FontSize="Medium"/>
+        
+        <StackLayout Grid.Row="1"
+                     Orientation="Horizontal"
+                     Padding="10"
+                     Spacing="10"
+                     HorizontalOptions="End">
+          <Button Text="Pull"
+                  IsEnabled="{Binding IsBusy, Converter={StaticResource NegativeConverter}}"
+                  Command="{Binding PullCommand}"
+                  VerticalOptions="Center"
+                  FontSize="Medium"/>
+          <Button Text="Add Tile"
+                  IsVisible="{Binding ExistsTile, Converter={StaticResource NegativeConverter}}"
+                  IsEnabled="{Binding IsBusy, Converter={StaticResource NegativeConverter}}"
+                  Command="{Binding ToggleCommand}"
+                  VerticalOptions="Center"
+                  FontSize="Medium"/>
+          <Button Text="Remove Tile"
+                  IsVisible="{Binding ExistsTile}"
+                  IsEnabled="{Binding IsBusy, Converter={StaticResource NegativeConverter}}"
+                  Command="{Binding ToggleCommand}"
+                  VerticalOptions="Center"
+                  FontSize="Medium"/>
+        </StackLayout>
+      </Grid>
+
+    </ScrollView>
+
   </Grid>
 
 </ContentPage>

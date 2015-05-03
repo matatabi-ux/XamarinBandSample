@@ -33,13 +33,13 @@ namespace XamarinBandSample.Band.Personalizations
         /// 壁紙の取得
         /// </summary>
         /// <returns>壁紙画像のソース</returns>
-        Task<ImageSource> GetMeTileImageSourceAsync();
+        Task<StreamImageSource> GetMeTileImageSourceAsync();
 
         /// <summary>
         /// 壁紙の設定
         /// </summary>
-        /// <param name="stream">壁紙画像の入力ストリーム</param>
+        /// <param name="source">壁紙画像のソース</param>
         /// <returns>Task</returns>
-        Task SetMeTileImageSourceAsync(Stream stream);
+        Task SetMeTileImageSourceAsync(StreamImageSource source);
     }
 }

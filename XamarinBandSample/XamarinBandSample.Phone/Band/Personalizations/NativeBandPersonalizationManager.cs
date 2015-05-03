@@ -52,10 +52,9 @@ namespace XamarinBandSample.Phone.Band.Personalizations
         /// 壁紙の取得
         /// </summary>
         /// <returns>壁紙画像のソース</returns>
-        public async Task<ImageSource> GetMeTileImageSourceAsync()
+        public async Task<StreamImageSource> GetMeTileImageSourceAsync()
         {
-            var image = await this.GetMeTileImageAsync();
-            return ImageSource.FromStream(() => image.ToWriteableBitmap().PixelBuffer.AsStream());
+            return NativeBandImageConvert.FromNative(await this.manager.GetMeTileImageAsync());
         }
 
         /// <summary>
@@ -63,17 +62,10 @@ namespace XamarinBandSample.Phone.Band.Personalizations
         /// </summary>
         /// <param name="stream">壁紙画像の入力ストリーム</param>
         /// <returns>Task</returns>
-        public async Task SetMeTileImageSourceAsync(Stream stream)
+        public async Task SetMeTileImageSourceAsync(StreamImageSource source)
         {
-            using (var ras = stream.AsRandomAccessStream())
-            {
-                var bitmap = new WriteableBitmap(310, 102);
-                await bitmap.SetSourceAsync(ras);
-
-                await this.SetMeTileImageAsync(bitmap.ToBandImage());
-            }
+            await this.manager.SetMeTileImageAsync(await NativeBandImageConvert.ToNative(source));
         }
-
         /// <summary>
         /// 壁紙の取得
         /// </summary>

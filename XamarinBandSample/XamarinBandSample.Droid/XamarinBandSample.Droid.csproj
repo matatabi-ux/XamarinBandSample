@@ -95,10 +95,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Band\NativeBandImageConvert.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Band\NativeBandInfo.cs" />
     <Compile Include="Band\NativeBandClientManager.cs" />
     <Compile Include="Band\NativeBandClient.cs" />
-    <Compile Include="Band\Personalizations\NativeBandPersonalizationManager.cs" />
+    <Compile Include="Band\NativeBandThemeConvert.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Band\Personalizations\NativeBandPersonalizationManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Band\Sensors\NativeBandAcceleromerter.cs" />
     <Compile Include="Band\Sensors\NativeBandAccelerometerReading.cs" />
     <Compile Include="Band\Sensors\NativeBandContactReading.cs" />
@@ -117,6 +125,10 @@
     <Compile Include="Band\Sensors\NativeBandSkinTemperatureSensor.cs" />
     <Compile Include="Band\Sensors\NativeBandUltravioletLightSensor.cs" />
     <Compile Include="Band\Sensors\NativeBandUltravioletLightReading.cs" />
+    <Compile Include="Band\Tiles\NativeBandTile.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Band\Tiles\NativeBandTileManager.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

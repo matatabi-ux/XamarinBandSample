@@ -84,7 +84,10 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Band\NativeBandImageConvert.cs" />
     <Compile Include="Band\Personalizations\NativeBandPersonalizationManager.cs" />
+    <Compile Include="Band\Tiles\NativeBandTile.cs" />
+    <Compile Include="Band\Tiles\NativeBandTileManager.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
