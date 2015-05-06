@@ -11,7 +11,7 @@
     <RootNamespace>XamarinBandSample.iOS</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>XamarinBandSampleiOS</AssemblyName>
-    <NuGetPackageImportStamp>0c7a12e1</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>3ac078a3</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>

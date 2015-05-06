@@ -21,7 +21,7 @@ using Native = android::Microsoft.Band;
 
 namespace XamarinBandSample.Droid.Band.Sensors
 {   /// <summary>
-    /// センサー基底クラス
+    /// Android 用センサー基底クラス
     /// </summary>
     /// <typeparam name="T">センサー情報クラス</typeparam>
     public abstract class NativeBandSensorBase<T> : IBandSensor<T> where T : IBandSensorReading

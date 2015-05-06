@@ -25,7 +25,7 @@ using UIKit;
 namespace XamarinBandSample.iOS.Band.Sensors
 {
     /// <summary>
-    /// センサー基底クラス
+    /// iOS 用センサー基底クラス
     /// </summary>
     /// <typeparam name="T">センサー情報クラス</typeparam>
     public abstract class NativeBandSensorBase<T> : IBandSensor<T> where T : IBandSensorReading
