@@ -52,10 +52,12 @@ namespace XamarinBandSample.iOS.Band.Sensors
                 new NativeBandDistanceSensor(manager), new ContainerControlledLifetimeManager());
             App.Container.RegisterInstance<IBandSensor<IBandSkinTemperatureReading>>(
                 new NativeBandSkinTemperatureSensor(manager), new ContainerControlledLifetimeManager());
-            App.Container.RegisterInstance<IBandSensor<IBandUltravioletLightReading>>(
+            App.Container.RegisterInstance<IBandSensor<IBandUVReading>>(
                 new NativeBandUltravioletLightSensor(manager), new ContainerControlledLifetimeManager());
             App.Container.RegisterInstance<IBandContactSensor>(
                 new NativeBandContactSensor(manager), new ContainerControlledLifetimeManager());
+            App.Container.RegisterInstance<IBandSensor<IBandCaloriesReading>>(
+                new NativeBandCaloriesSensor(manager), new ContainerControlledLifetimeManager());
         }
 
         /// <summary>
@@ -117,9 +119,17 @@ namespace XamarinBandSample.iOS.Band.Sensors
         /// <summary>
         /// 紫外線センサー
         /// </summary>
-        public IBandSensor<IBandUltravioletLightReading> Ultraviolet
+        public IBandSensor<IBandUVReading> UV
         {
-            get { return App.Container.Resolve<IBandSensor<IBandUltravioletLightReading>>(); }
+            get { return App.Container.Resolve<IBandSensor<IBandUVReading>>(); }
+        }
+
+        /// <summary>
+        /// 運動量センサー
+        /// </summary>
+        public IBandSensor<IBandCaloriesReading> Calories
+        {
+            get { return App.Container.Resolve<IBandSensor<IBandCaloriesReading>>(); }
         }
     }
 }

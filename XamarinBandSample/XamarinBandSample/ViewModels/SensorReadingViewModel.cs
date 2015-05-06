@@ -325,15 +325,15 @@ namespace XamarinBandSample.ViewModels
         /// <summary>
         /// 紫外線レベル
         /// </summary>
-        private UltravioletExposureLevel exposureLevel = 0;
+        private UVIndexLevel exposureLevel = 0;
 
         /// <summary>
         /// 紫外線レベル
         /// </summary>
-        public UltravioletExposureLevel ExposureLevel
+        public UVIndexLevel ExposureLevel
         {
             get { return this.exposureLevel; }
-            set { this.SetProperty<UltravioletExposureLevel>(ref this.exposureLevel, value); }
+            set { this.SetProperty<UVIndexLevel>(ref this.exposureLevel, value); }
         }
 
         #endregion //UVSensor
@@ -413,10 +413,10 @@ namespace XamarinBandSample.ViewModels
                     this.client.SensorManager.SkinTemperature.ReadingChanged += this.OnSkinTemperatureReadingChanged;
                 }
                 // 紫外線レベルの検知開始
-                if (this.client.SensorManager.Ultraviolet.IsSupported)
+                if (this.client.SensorManager.UV.IsSupported)
                 {
-                    await this.client.SensorManager.Ultraviolet.StartReadingsAsync();
-                    this.client.SensorManager.Ultraviolet.ReadingChanged += this.OnUltravioletReadingChanged;
+                    await this.client.SensorManager.UV.StartReadingsAsync();
+                    this.client.SensorManager.UV.ReadingChanged += this.OnUltravioletReadingChanged;
                 }
                 // 着用状態の検知開始
                 if (this.client.SensorManager.Contact.IsSupported)
@@ -481,11 +481,11 @@ namespace XamarinBandSample.ViewModels
                     this.SkinTemperature = 0d;
                 }
                 // 紫外線レベルの検知終了
-                if (this.client.SensorManager.Ultraviolet.IsSupported)
+                if (this.client.SensorManager.UV.IsSupported)
                 {
-                    await this.client.SensorManager.Ultraviolet.StopReadingsAsync();
-                    this.client.SensorManager.Ultraviolet.ReadingChanged -= this.OnUltravioletReadingChanged;
-                    this.ExposureLevel = UltravioletExposureLevel.None;
+                    await this.client.SensorManager.UV.StopReadingsAsync();
+                    this.client.SensorManager.UV.ReadingChanged -= this.OnUltravioletReadingChanged;
+                    this.ExposureLevel = UVIndexLevel.None;
                 }
                 // 着用状態の検知終了
                 if (this.client.SensorManager.Contact.IsSupported)
@@ -597,13 +597,13 @@ namespace XamarinBandSample.ViewModels
         /// </summary>
         /// <param name="sender">イベント発行者</param>
         /// <param name="e">イベント引数</param>
-        private void OnUltravioletReadingChanged(object sender, BandSensorReadingEventArgs<IBandUltravioletLightReading> e)
+        private void OnUltravioletReadingChanged(object sender, BandSensorReadingEventArgs<IBandUVReading> e)
         {
             if (e == null)
             {
                 return;
             }
-            this.ExposureLevel = e.SensorReading.ExposureLevel;
+            this.ExposureLevel = e.SensorReading.IndexLevel;
         }
 
         /// <summary>

@@ -27,7 +27,7 @@ namespace XamarinBandSample.iOS.Band.Sensors
     /// <summary>
     /// iOS 用紫外線データ
     /// </summary>
-    public class NativeBandUltravioletLightReading : IBandUltravioletLightReading
+    public class NativeBandUltravioletLightReading : IBandUVReading
     {
         /// <summary>
         /// コンストラクタ
@@ -36,18 +36,18 @@ namespace XamarinBandSample.iOS.Band.Sensors
         public NativeBandUltravioletLightReading(Native.Sensors.BandSensorUVData data)
         {
             this.Timestamp = DateTime.Now;
-            this.ExposureLevel = UltravioletExposureLevel.None;
+            this.IndexLevel = UVIndexLevel.None;
             if (data.UVIndexLevel == Native.Sensors.UVIndexLevel.High)
             {
-                this.ExposureLevel = UltravioletExposureLevel.High;
+                this.IndexLevel = UVIndexLevel.High;
             }
             if (data.UVIndexLevel == Native.Sensors.UVIndexLevel.Medium)
             {
-                this.ExposureLevel = UltravioletExposureLevel.Medium;
+                this.IndexLevel = UVIndexLevel.Medium;
             }
             if (data.UVIndexLevel == Native.Sensors.UVIndexLevel.Low)
             {
-                this.ExposureLevel = UltravioletExposureLevel.Low;
+                this.IndexLevel = UVIndexLevel.Low;
             }
         }
 
@@ -59,6 +59,6 @@ namespace XamarinBandSample.iOS.Band.Sensors
         /// <summary>
         /// 紫外線レベル
         /// </summary>
-        public UltravioletExposureLevel ExposureLevel { get; private set; }
+        public UVIndexLevel IndexLevel { get; private set; }
     }
 }

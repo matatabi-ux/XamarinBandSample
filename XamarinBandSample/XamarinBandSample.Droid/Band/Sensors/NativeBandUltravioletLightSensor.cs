@@ -34,7 +34,7 @@ namespace XamarinBandSample.Droid.Band.Sensors
     /// <summary>
     /// Android 用紫外線センサー
     /// </summary>
-    public class NativeBandUltravioletLightSensor : NativeBandSensorBase<IBandUltravioletLightReading>
+    public class NativeBandUltravioletLightSensor : NativeBandSensorBase<IBandUVReading>
     {
         /// <summary>
         /// 紫外線センサー
@@ -44,7 +44,7 @@ namespace XamarinBandSample.Droid.Band.Sensors
         /// <summary>
         /// センサー値変更イベント
         /// </summary>
-        public override event EventHandler<BandSensorReadingEventArgs<IBandUltravioletLightReading>> ReadingChanged;
+        public override event EventHandler<BandSensorReadingEventArgs<IBandUVReading>> ReadingChanged;
 
         /// <summary>
         /// コンストラクタ
@@ -69,16 +69,17 @@ namespace XamarinBandSample.Droid.Band.Sensors
                 return;
             }
             this.ReadingChanged.Invoke(
-                this, new BandSensorReadingEventArgs<IBandUltravioletLightReading>(new NativeBandUltravioletLightReading(e.SensorReading)));
+                this, new BandSensorReadingEventArgs<IBandUVReading>(new NativeBandUltravioletLightReading(e.SensorReading)));
         }
 
         /// <summary>
         /// センサー検知を開始する
         /// </summary>
-        /// <returns>Task</returns>
-        public override Task StartReadingsAsync()
+        /// <returns>成功した場合は<code>true</code>、それ以外は<code>false</code></returns>
+        public override async Task<bool> StartReadingsAsync()
         {
-            return this.sensor.StartReadingsTaskAsync();
+            await this.sensor.StartReadingsTaskAsync();
+            return true;
         }
 
         /// <summary>

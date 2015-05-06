@@ -39,12 +39,7 @@ namespace XamarinBandSample.Band
         {
             nfloat red, green, blue, alpha;
             color.UIColor.GetRGBA(out red, out green, out blue, out alpha);
-            return new BandColor
-            {
-                R = (byte)(red * 255f),
-                G = (byte)(green * 255f),
-                B = (byte)(blue * 255f),
-            };
+            return new BandColor((byte)(red * 255f), (byte)(green * 255f), (byte)(blue * 255f));
         }
 
         /// <summary>
@@ -56,7 +51,7 @@ namespace XamarinBandSample.Band
         {
             return Native.Personalization.BandColor.FromRgb(color.R, color.G, color.B);
         }
-        
+
         /// <summary>
         /// テーマカラーの変換
         /// </summary>

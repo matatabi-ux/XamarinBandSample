@@ -16,6 +16,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using global::Microsoft.Band.Sensors;
+using Microsoft.Band;
 using Native = android::Microsoft.Band;
 
 namespace XamarinBandSample.Droid.Band.Sensors
@@ -62,9 +63,9 @@ namespace XamarinBandSample.Droid.Band.Sensors
         /// </summary>
         /// <remarks>中断は非対応</remarks>
         /// <param name="token">中断トークン</param>
-        /// <returns>Task</returns>
+        /// <returns>成功した場合は<code>true</code>、それ以外は<code>false</code></returns>
         [Obsolete("CancellationToken is not supported for Android.")]
-        public virtual Task StartReadingsAsync(CancellationToken token)
+        public virtual Task<bool> StartReadingsAsync(CancellationToken token)
         {
             return this.StartReadingsAsync();
         }
@@ -72,8 +73,8 @@ namespace XamarinBandSample.Droid.Band.Sensors
         /// <summary>
         /// センサー検知を開始する
         /// </summary>
-        /// <returns>Task</returns>
-        public abstract Task StartReadingsAsync();
+        /// <returns>成功した場合は<code>true</code>、それ以外は<code>false</code></returns>
+        public abstract Task<bool> StartReadingsAsync();
 
         /// <summary>
         /// センサー検知を停止する
@@ -125,6 +126,36 @@ namespace XamarinBandSample.Droid.Band.Sensors
                     break;
             }
             return sampleRate;
+        }
+
+        /// <summary>
+        /// 現在のユーザー承諾状態を取得する
+        /// </summary>
+        /// <returns>ユーザー承諾状態</returns>
+        public virtual UserConsent GetCurrentUserConsent()
+        {
+            return UserConsent.Granted;
+        }
+
+        /// <summary>
+        /// センサー利用のユーザー承諾を要求する
+        /// </summary>
+        /// <param name="token">中断トークン</param>
+        /// <remarks>非対応</remarks>
+        /// <returns>成功した場合は<code>true</code>、それ以外は<code>false</code></returns>
+        [Obsolete("SupportedReportingIntervals is not supported for iOS.")]
+        public virtual Task<bool> RequestUserConsentAsync(CancellationToken token)
+        {
+            return this.RequestUserConsentAsync();
+        }
+
+        /// <summary>
+        /// センサー利用のユーザー承諾を要求する
+        /// </summary>
+        /// <returns>成功した場合は<code>true</code>、それ以外は<code>false</code></returns>
+        public virtual Task<bool> RequestUserConsentAsync()
+        {
+            return Task.FromResult(true);
         }
     }
 }

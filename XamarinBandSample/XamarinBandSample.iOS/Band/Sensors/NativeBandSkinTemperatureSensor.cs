@@ -67,10 +67,11 @@ namespace XamarinBandSample.iOS.Band.Sensors
         /// <summary>
         /// センサー検知を開始する
         /// </summary>
-        /// <returns>Task</returns>
-        public override Task StartReadingsAsync()
+        /// <returns>成功した場合は<code>true</code>、それ以外は<code>false</code></returns>
+        public override Task<bool> StartReadingsAsync()
         {
-            return Task.Run(() => this.sensor.StartReadings());
+            this.sensor.StartReadings();
+            return Task.FromResult(true);
         }
 
         /// <summary>
