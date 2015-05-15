@@ -32,12 +32,7 @@ namespace XamarinBandSample.Droid.Band
         /// <returns>ã§í îzêFèÓïÒ</returns>
         public static BandColor FromNative(Color color)
         {
-            return new BandColor
-            {
-                R = color.R,
-                G = color.G,
-                B = color.B,
-            };
+            return new BandColor(color.R, color.G, color.B);
         }
 
         /// <summary>
